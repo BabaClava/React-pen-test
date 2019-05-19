@@ -1,10 +1,21 @@
 const http = require('http');
 const fs = require('fs');
+const url = require('url');
 
 http.createServer((req, res) => {
-    
+console.log(url.parse(req.url, true).query);
+// count:10
+// page:1
+   
     if (req.url === '/users') {
-        let data = fs.readFileSync('./data-mocks/users-data.js', 'utf-8');
+        let data = JSON.parse(fs.readFileSync('./data-mocks/users-data.json', 'utf-8'));
+        // let a = [];
+        // for (let i = 2; i < 4; i++) {
+        //     a.push(data[i]);
+        // }
+        // console.log(a);
+        
+        
         const headers = {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
