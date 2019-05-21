@@ -1,9 +1,10 @@
 import React from 'react';
 import s from './Header.module.sass'
+import {Col} from 'reactstrap';
 
 const Header = () => {
     return (
-      <div className={s.header}>header</div>
+      <Col tag='header' className={s.header}>header</Col>
     );
 }
 

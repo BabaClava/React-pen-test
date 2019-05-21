@@ -22,12 +22,7 @@ const getRes = (data, query) => {
 
 const server = (req, res) => {
     let query = url.parse(req.url, true).query;
-    console.log(query);
     let path = url.parse(req.url).pathname;
-    console.log(path);
-    
-    // count:10
-    // page:1
        
         if (path === '/users') {
             let data = JSON.parse(fs.readFileSync('./data-mocks/users-data.json', 'utf-8'));

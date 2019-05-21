@@ -1,12 +1,13 @@
 import React from "react";
-import User from "./Users/User";
+import User from "./User/User";
 import { Container, Row, Col } from "reactstrap";
 import s from './Users.module.sass';
 
 const Users = props => {
   let usersElements = props.users.map(el => (
-    <User user={el} 
-          onFollowChange={props.onFollowChange} />
+    <User {...el}
+          onFollowChange={props.onFollowChange}
+          key={el.id} />
   ));  
 
   return (

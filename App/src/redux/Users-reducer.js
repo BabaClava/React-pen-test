@@ -1,51 +1,16 @@
 const TEST = 'TEST';
-const FOLLOW_CHANGE = 'FOLLOW-CHANGE';
-const SET_USERS = 'SET-USERS';
+const FOLLOW_CHANGE = 'FOLLOW_CHANGE';
+const SET_USERS = 'SET_USERS';
+const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT';
+const IS_FETCHING_TOGGLER = 'IS_FETCHING_TOGGLER';
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 
 let initialState = {
-    users: [
-        {
-            id: 1,
-            name: 'Dmitry',
-            surname: 'K.',
-            country: 'Belarus',
-            city: 'Minsk',
-            title: 'I am looking for a job right now...',
-            follow: true,
-            avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/SNice.svg/220px-SNice.svg.png'
-        },
-        {
-            id: 2,
-            name: 'Svetlana',
-            surname: 'D.',
-            country: 'Belarus',
-            city: 'Minsk',
-            title: 'I am so pretty',
-            follow: true,
-            //avatar: null
-
-        },
-        {
-            id: 3,
-            name: 'Sergei',
-            surname: 'S.',
-            country: 'Ukraine',
-            city: 'Kyiv',
-            title: 'I like football!',
-            follow: false,
-            avatar: null
-        },
-        {
-            id: 4,
-            name: 'Andrew',
-            surname: 'T.',
-            country: 'United States',
-            city: 'Philadelphia',
-            title: 'I am free to help you to create good Video Production',
-            follow: false,
-            avatar: null
-        }
-    ]
+    users: [],
+    pageSize: 4,
+    totalCount: 0,
+    isFetching: false,
+    currentPage: 1
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -68,7 +33,22 @@ const usersReducer = (state = initialState, action) => {
         case SET_USERS:
             return {
                 ...state,
-                users: [...state.users, ...action.users]
+                users: [...action.users],
+            }
+        case SET_TOTAL_COUNT:
+            return {
+                ...state,
+                totalCount: action.totalCount
+            }
+        case IS_FETCHING_TOGGLER:
+            return {
+                ...state,
+                isFetching: action.isFetching
+            }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.page
             }
         default:
             return state;
@@ -81,12 +61,27 @@ export const test = () => ({
 
 export const followChange = (id) => ({
     type: FOLLOW_CHANGE,
-    id: id
+    id
 });
 
 export const setUsers = (users) => ({
     type: SET_USERS,
-    users: users
+    users
+});
+
+export const setTotalCount = (totalCount) => ({
+    type: SET_TOTAL_COUNT,
+    totalCount
+});
+
+export const isFetchingToggler = (isFetching) => ({
+    type: IS_FETCHING_TOGGLER,
+    isFetching
+});
+
+export const setCurrentPage = (page) => ({
+    type: SET_CURRENT_PAGE,
+    page
 });
 
 export default usersReducer;
