@@ -33,12 +33,15 @@ class UsersAPI extends Component {
     });
   }
 
+  get pagesCount() {
+    return Math.ceil(this.props.totalCount / this.props.pageSize)
+  }
+
   render() {
     return (
         <>
-            <Paginator 
-              pageSize={this.props.pageSize}
-              totalCount={this.props.totalCount}
+            <Paginator
+              pagesCount={this.pagesCount}
               currentPage={this.props.currentPage}
               onPageChange={this.onPageChange}
             />

@@ -1,0 +1,25 @@
+{
+  "name": "React-pen-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd App && npm start",
+    "server": "cd server && npm start",
+    "start": "concurrently - kill-others \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BabaClava/React-pen-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BabaClava/React-pen-test/issues"
+  },
+  "homepage": "https://github.com/BabaClava/React-pen-test#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}

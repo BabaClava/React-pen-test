@@ -2,10 +2,9 @@ import React from 'react';
 import s from './Paginator.module.sass';
 
 const Paginator = (props) => {
-    let pagesCount = Math.ceil(props.totalCount / props.pageSize);
+    let pages = [];
 
-    let pages = []
-    for (let i = 1; i <= pagesCount; i++) {
+    for (let i = 1; i <= props.pagesCount; i++) {
         pages.push(
           <span
             className={props.currentPage === i && s.selected}
@@ -19,5 +18,10 @@ const Paginator = (props) => {
         <div>{pages}</div>
         );
 }
+      
+Paginator.defaultProps = {
+  pagesCount:1,
+  currentPage: 1
+};
  
 export default Paginator;
