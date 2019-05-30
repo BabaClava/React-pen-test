@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon server.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "nodemon": "^1.19.1"
   }
 }

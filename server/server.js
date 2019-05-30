@@ -1,6 +1,8 @@
-const http = require('http');
-const fs = require('fs');
-const url = require('url');
+const http = require('http'),
+      fs = require('fs'),
+      url = require('url');
+
+const PORT = 3002;
 
 const getRes = (data, query) => {
     let count = Number(query.count) || 10,
@@ -17,10 +19,9 @@ const getRes = (data, query) => {
         items = data.slice(start, end);
     }
     return result = {items, TotalCount: data.length};
-
 }
 
-const server = (req, res) => {
+const server = http.createServer((req, res) => {
     let query = url.parse(req.url, true).query;
     let path = url.parse(req.url).pathname;
        
@@ -38,7 +39,17 @@ const server = (req, res) => {
             res.writeHead(200, headers)
             res.end(JSON.stringify(result, null, '\t'));
         }
-        res.end('test\n');
-    };
+        res.end('test\r\n');
+});
+    
+server.on("error", err => {
+    if (err.code === "EADDRINUSE") {
+    console.error(`No access to port: ${PORT}\r\n`);
+    }
+});
 
-http.createServer(server).listen(8080, () => console.log('Server start'));
+server.on('clientError', (err, socket) => {
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
+server.listen(PORT, () => console.log(`Server start on port:${PORT}\r\n`));
