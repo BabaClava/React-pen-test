@@ -8,13 +8,13 @@ const PORT = 3000;
 const routing = {
     '/api/users': 'users data, need query or default params',
     '/api/profile/status/:id': 'profile status, need $id. Coming soon',
-    '/api/profile/:id$': 'profile data, need $id'        //like an express, but we can use any SPECIFIC character and replace his later;
+    '/api/profile/:id': 'profile data, need $id'        //like an express, but we can use any SPECIFIC character and replace his later;
 };
 
 const matching = [];        //puts all routes like a "/path/:id" in new array
 for (const key in routing) {
     if (key.includes(':')) {        // ':' - it`s a random mark that we used in routing before
-        const rx = new RegExp( key.replace(/:[\w]+/g, '(\\d+)') );
+        const rx = new RegExp( (key+'/?$').replace(/:[\w]+/g, '(\\d+)') );
         const handler = routing[key];
         matching.push([rx, handler]);
         delete routing[key];
