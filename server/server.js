@@ -5,7 +5,7 @@ const http = require('http'),
 const PORT = 3002;
 
 const server = http.createServer((req, res) => {
-    router(req, res);
+    router({req, res});
 });
     
 server.on("error", err => {
@@ -15,7 +15,7 @@ server.on("error", err => {
 });
 
 server.on('clientError', (err, socket) => {
-    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+    socket.end('HTTP/1.1 400 Bad Request\r\n');
 });
 
 server.listen(PORT, () => console.log(`Server start on port:${PORT}\r\n`));

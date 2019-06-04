@@ -1,18 +1,19 @@
 'use strict'
 
-const url = require('url'),
-      RoutingCreator = require('../lib/RoutingCreator');
+const url = require('url');
 
-const users = require('./requestHandlers/users')
+const RoutingCreator = require('../lib/RoutingCreator'),
+      Serializer = require('../lib/Serializer.js'),
+      usersHandler = require('./requestHandlers/users');
 
 const [exact, matching] = RoutingCreator({
-        '/api/users': users,
+        '/api/users': usersHandler,
         '/api/profile/status/:id': 'profile status, need $id. Coming soon',
         '/api/profile/:id': 'profile data, need $id'       //like an express, but we can use ANY SPECIFIC character and replace his later;
     });
 
-const router = (req, res) => {
-    const parted_url = url.parse(req.url, true);
+const router = client => {
+    const parted_url = url.parse(client.req.url, true);
     const params = {};
     params.query = parted_url.query;
     let handler = exact[parted_url.pathname];
@@ -31,14 +32,9 @@ const router = (req, res) => {
             }
         } 
     }
-    if (!handler) {
-        res.end('not found');
-    } else if(typeof handler === 'string') {
-        res.end(handler);
-        return;
-    } else {
-        handler(req, res, params);
-    }
+
+    Serializer(handler, client, params);
 }
+
 
 module.exports = router;
