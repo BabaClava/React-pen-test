@@ -6,6 +6,9 @@
     "start": "nodemon server.js"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "autocannon": "^4.0.0"
+  },
+  "dependencies": {
   }
 }
