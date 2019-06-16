@@ -4,10 +4,11 @@ const url = require('url');
 
 const RoutingCreator = require('../lib/RoutingCreator'),
 	  Serializer = require('../lib/Serializer.js'),
-	  usersHandler = require('./requestHandlers/users');
+	  usersHandler = require('./requestHandlers/users'),
+	  rootHandler = require('./requestHandlers/root');
 
 const [exact, matching] = RoutingCreator({
-		'/' : 'root',
+		'/' : rootHandler,
 		'/api/users': usersHandler,
 		'/api/profile/status/:id': 'profile status, need $id. Coming soon',
 		'/api/profile/:id': 'profile data, need $id'       //like an express, but we can use ANY SPECIFIC character and replace his later;

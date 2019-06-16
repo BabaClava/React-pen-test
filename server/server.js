@@ -1,6 +1,6 @@
 'use strict'
 const http = require('http'),
-	  router = require('./routing/router');
+      router = require('./routing/router')
 
 const PORT = 3002;
 
