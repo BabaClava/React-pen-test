@@ -1,11 +1,13 @@
 'use strict'
-const http = require('http'),
-      router = require('./routing/router')
+const http = require('http');
+
+const router = require('./routing/router');
 
 const PORT = 3002;
 
 http
 	.createServer((req, res) => {
+        console.log(req.url);
     	router({ req, res });
 	})
     .on("error", err => {

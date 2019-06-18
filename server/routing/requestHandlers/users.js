@@ -36,7 +36,7 @@ const getData = (usersData) => {
 	return new Promise ( (resolve, reject) => {
 		fs.readFile(usersData, 'utf8', (err, data) => {
 			if (err) {
-				reject(error)
+				reject(err)
 			} else {
 				resolve(data)
 			} 
