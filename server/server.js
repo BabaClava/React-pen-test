@@ -1,13 +1,26 @@
 'use strict'
-const http = require('http');
+const http = require('http')
+    , path = require('path');
 
-const router = require('./routing/router');
+const router = require('./routing/router')
+    , config = require('./config')
+    , StaticServe = require('./lib/StaticServe');
 
-const PORT = 3002;
+const PORT = config.PORT
+    , STATIC = config.STATIC;
 
 http
 	.createServer((req, res) => {
-    	router({ req, res });
+        
+        if (req.url === '/') req.url = '/index.html';
+
+        const ext = path.parse(req.url).ext;
+        const staticPath = path.normalize(path.join(__dirname, STATIC));
+
+        ext
+        ? StaticServe({req, res}, staticPath)
+        : router({ req, res });
+
 	})
     .on("error", err => {
         if (err.code === "EADDRINUSE") {

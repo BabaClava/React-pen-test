@@ -1,5 +1,8 @@
 'use strict'
 
+const fs = require('fs')
+    , path = require('path');
+
 const HttpError = require('../lib/HttpError');
 
 const mimeType = {
@@ -19,14 +22,36 @@ const mimeType = {
     '.ttf': 'aplication/font-sfnt'
   };
 
-const StaticServe = (client, pathName, ext) => {
+const StaticServe = (client, staticPath) => {
+    
+    const pathName = path.join(staticPath, client.req.url);
+    const ext = path.parse(pathName).ext;
+
     fs.access(pathName, fs.constants.F_OK, (err) => {
         if (err) {
             HttpError(client.res, 404, 'File not found');
         } else {
-            xxx
+            const file = fs.ReadStream(pathName);
+            writeFile(client.res, file, ext)
         }
     });
+}
+
+function writeFile (res, file, ext) {
+    file.pipe(res);
+
+    file
+        .on('error', (err) => {
+            console.error(err);
+            HttpError(res, 500, 'Server Error')
+        })
+        .on('open', () => {
+            res.setHeader('Content-Type', mimeType[ext] || 'text/plain');
+        })
+        
+    res.on('close', () => {
+        file.destroy();
+    })
 }
 
 module.exports = StaticServe;

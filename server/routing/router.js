@@ -1,15 +1,11 @@
 'use strict'
 
-const url = require('url'),
-	  path = require('path');
+const url = require('url');
 
-const RoutingCreator = require('../lib/RoutingCreator'),
-	  Serializer = require('../lib/Serializer'),
-	  usersHandler = require('./requestHandlers/users'),
-	  rootHandler = require('./requestHandlers/root'),
-	  StaticServe = require('../lib/StaticServe')
+const RoutingCreator = require('../lib/RoutingCreator')
+	, Serializer = require('../lib/Serializer')
+	, usersHandler = require('./requestHandlers/users');
 
-const STATIC = '../public';
 
 const [exact, matching] = RoutingCreator({
 		'/api/users': usersHandler,
@@ -23,17 +19,9 @@ const router = client => {
 	const parsedUrl = url.parse(client.req.url, true);
 	const params = {};
 	params.query = parsedUrl.query;
-	
-	const sanitizePath = path.normalize(path.join(STATIC, parsedUrl.pathname));
-	const pathName = path.join(__dirname, sanitizePath);
-	const ext = path.parse(pathName).ext;
 
-	if (ext) {
-		StaticServe(client, pathName, ext)
-	} else {
-		const handler = routeMatching(parsedUrl, params);
-		Serializer(handler, client, params);
-	}
+	const handler = routeMatching(parsedUrl, params);
+	Serializer(handler, client, params);
 	
 }
 
