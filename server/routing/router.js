@@ -1,28 +1,48 @@
 'use strict'
 
-const url = require('url');
+const url = require('url'),
+	  path = require('path');
 
 const RoutingCreator = require('../lib/RoutingCreator'),
-	  Serializer = require('../lib/Serializer.js'),
+	  Serializer = require('../lib/Serializer'),
 	  usersHandler = require('./requestHandlers/users'),
-	  rootHandler = require('./requestHandlers/root');
+	  rootHandler = require('./requestHandlers/root'),
+	  StaticServe = require('../lib/StaticServe')
+
+const STATIC = '../public';
 
 const [exact, matching] = RoutingCreator({
-		'/' : rootHandler,
 		'/api/users': usersHandler,
 		'/api/profile/status/:id': 'profile status, need $id. Coming soon',
 		'/api/profile/:id': 'profile data, need $id'       //like an express, but we can use ANY SPECIFIC character and replace his later;
 	});
 
 const router = client => {
-	const parted_url = url.parse(client.req.url, true);
+	if (client.req.url === '/') client.req.url = '/index.html';
+
+	const parsedUrl = url.parse(client.req.url, true);
 	const params = {};
-	params.query = parted_url.query;
-	let handler = exact[parted_url.pathname];
+	params.query = parsedUrl.query;
+	
+	const sanitizePath = path.normalize(path.join(STATIC, parsedUrl.pathname));
+	const pathName = path.join(__dirname, sanitizePath);
+	const ext = path.parse(pathName).ext;
+
+	if (ext) {
+		StaticServe(client, pathName, ext)
+	} else {
+		const handler = routeMatching(parsedUrl, params);
+		Serializer(handler, client, params);
+	}
+	
+}
+
+function routeMatching (parsedUrl, params) {
+	let handler = exact[parsedUrl.pathname];
 	if (!handler) {
 		for (let i = 0; i < matching.length; i++) {
 			const rx = matching[i];
-			let paramsValues = parted_url.pathname.match(rx[0]);
+			let paramsValues = parsedUrl.pathname.match(rx[0]);
 			if (paramsValues) {
 				handler = rx[1];
 				paramsValues.shift();     //remove path and leave only specific parameters
@@ -34,8 +54,7 @@ const router = client => {
 	    	}
 		}
 	}
-
-	Serializer(handler, client, params);
+	return handler;
 }
 
 module.exports = router;

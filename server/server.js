@@ -7,7 +7,6 @@ const PORT = 3002;
 
 http
 	.createServer((req, res) => {
-        console.log(req.url);
     	router({ req, res });
 	})
     .on("error", err => {
