@@ -16,7 +16,7 @@ const users = ({req, res}, params) => {
 		/** add other headers as per requirement */
 	  };
 
-	const usersData = path.resolve(__dirname + '/../../data-mocks/users-data.json');
+	const usersData = path.join(path.dirname(process.argv[1]), 'data-mocks/users-data.json');
 
 	getData(usersData)
 		.then(data => {

@@ -1,9 +1,12 @@
 'use strict'
 
 const fs = require('fs')
-    , path = require('path');
+    , path = require('path')
+    , config = require('../config');
 
 const HttpError = require('../lib/HttpError');
+
+const STATIC = config.STATIC;
 
 const mimeType = {
     '.ico': 'image/x-icon',
@@ -22,10 +25,13 @@ const mimeType = {
     '.ttf': 'aplication/font-sfnt'
   };
 
-const StaticServe = (client, staticPath) => {
-    
-    const pathName = path.join(staticPath, client.req.url);
+const StaticServe = (client) => {
+
+    const staticPath = path.join(path.dirname(process.argv[1]), STATIC);
+    const pathName = path.normalize(path.join(staticPath, client.req.url));
     const ext = path.parse(pathName).ext;
+
+    console.log(pathName);
 
     fs.access(pathName, fs.constants.F_OK, (err) => {
         if (err) {

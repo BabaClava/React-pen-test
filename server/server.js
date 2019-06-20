@@ -3,11 +3,10 @@ const http = require('http')
     , path = require('path');
 
 const router = require('./routing/router')
-    , config = require('./config')
-    , StaticServe = require('./lib/StaticServe');
+    , StaticServe = require('./lib/StaticServe')
+    , config = require('./config');
 
-const PORT = config.PORT
-    , STATIC = config.STATIC;
+const PORT = config.PORT;
 
 http
 	.createServer((req, res) => {
@@ -15,10 +14,9 @@ http
         if (req.url === '/') req.url = '/index.html';
 
         const ext = path.parse(req.url).ext;
-        const staticPath = path.normalize(path.join(__dirname, STATIC));
 
         ext
-        ? StaticServe({req, res}, staticPath)
+        ? StaticServe({req, res})
         : router({ req, res });
 
 	})

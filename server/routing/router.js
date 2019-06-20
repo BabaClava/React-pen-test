@@ -14,7 +14,6 @@ const [exact, matching] = RoutingCreator({
 	});
 
 const router = client => {
-	if (client.req.url === '/') client.req.url = '/index.html';
 
 	const parsedUrl = url.parse(client.req.url, true);
 	const params = {};
