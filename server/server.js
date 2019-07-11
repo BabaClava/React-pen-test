@@ -2,13 +2,23 @@
 const http = require('http')
     , path = require('path');
 
-const router = require('./routing/router')
+const Router = require('./lib/Router')
+    , RoutingCreator = require('./lib/RoutingCreator')
     , StaticServe = require('./lib/StaticServe')
-    , config = require('./config');
+    , config = require('./config')
+    , db = require('./db')
+    , usersHandler = require('./requestHandlers/users')
+    , profileHandler = require('./requestHandlers/profile');
 
-const PORT = config.PORT;
+const PORT = config.port;
 
-http
+const routs = RoutingCreator({
+    '/api/users': usersHandler,
+    '/api/profile/status/:id': 'profile status, need $id. Coming soon',
+    '/api/profile/:id': profileHandler     //like an express, but we can use ANY SPECIFIC character and replace his later
+})
+
+const app = http
 	.createServer((req, res) => {
         
         if (req.url === '/') req.url = '/index.html';
@@ -17,7 +27,7 @@ http
 
         ext
         ? StaticServe({req, res})
-        : router({ req, res });
+        : Router(routs, { req, res });
 
 	})
     .on("error", err => {
@@ -28,4 +38,12 @@ http
     .on("clientError", (err, socket) => {
         socket.end("HTTP/1.1 400 Bad Request\r\n");
     })
-    .listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`));
+
+db.connect()
+    .then(() => app.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`)))
+    .catch((err) => console.error(err));
+
+process.on("SIGINT", () => {
+    db.getClient().close();
+    process.exit();
+});

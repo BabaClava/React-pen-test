@@ -4,9 +4,9 @@ const fs = require('fs')
     , path = require('path')
     , config = require('../config');
 
-const HttpError = require('../lib/HttpError');
+const HttpError = require('../utils/HttpError');
 
-const STATIC = config.STATIC;
+const STATIC = config.static;
 
 const mimeType = {
     '.ico': 'image/x-icon',
