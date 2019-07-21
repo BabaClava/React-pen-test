@@ -2,17 +2,20 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import s from './User.module.sass';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
+import { NavLink } from 'react-router-dom';
 
 const User = (props) => {
   let onFollowChange = (e) => { 
-    props.onFollowChange(parseInt(e.target.id)) 
+    props.onFollowChange(Number(e.target.id)) 
   };  
 
   return (
     <Container className={s.container}>
       <Row>
         <Col xs="2" className={s.container}>
-          <img src={props.avatar || avatarPlaceholder} className={s.avatar} alt='avatar'/>
+          <NavLink to={`/profile/${props.id}`}>
+            <img src={props.photos.small ? `http://localhost:3002/${props.photos.small}`: avatarPlaceholder} className={s.avatar} alt='avatar'/>
+          </NavLink>
           <button
             id={props.id}
             className={s.followStatus}
@@ -29,7 +32,7 @@ const User = (props) => {
                 <span>{props.surname}</span>
               </div>
               <div>
-                <span>{props.title}</span>
+                <span>{props.status}</span>
               </div>
             </Col>
             <Col xs="3" className={s.location}>

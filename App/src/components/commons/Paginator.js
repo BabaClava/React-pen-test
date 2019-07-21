@@ -7,7 +7,8 @@ const Paginator = (props) => {
     for (let i = 1; i <= props.pagesCount; i++) {
         pages.push(
           <span
-            className={props.currentPage === i && s.selected}
+            key={i}
+            className={props.currentPage === i ? s.selected: ''}
             onClick={e => props.onPageChange(i)}
           >
             {i}

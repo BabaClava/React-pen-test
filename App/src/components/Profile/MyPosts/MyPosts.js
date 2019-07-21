@@ -5,7 +5,7 @@ import Post from "./Post/Post";
 const MyPosts = props => {
   
   let postsElements = props.postsData.map(el => (
-    <Post post={el.post} likesCount={el.likesCount} />
+    <Post post={el.post} likesCount={el.likesCount} key={el.post} />
   ));
 
   let onPostChange = (e) => props.onPostChange(e.target.value);

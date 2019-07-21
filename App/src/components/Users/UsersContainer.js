@@ -14,10 +14,10 @@ import Paginator from '../commons/Paginator';
 class UsersAPI extends Component {
   componentDidMount() {
     this.props.isFetchingToggler(true);
-    axios.get(`http://localhost:8080/users?count=${this.props.pageSize}&page=${this.props.currentPage}`)
+    axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${this.props.currentPage}`)
     .then(res => {
       this.props.setUsers(res.data.items);
-      this.props.setTotalCount(res.data.TotalCount);
+      this.props.setTotalCount(res.data.totalCount);
       this.props.isFetchingToggler(false)
     });
   }
@@ -25,10 +25,10 @@ class UsersAPI extends Component {
   onPageChange = (page) => {
       this.props.setCurrentPage(page);
       this.props.isFetchingToggler(true);
-      axios.get(`http://localhost:8080/users?count=${this.props.pageSize}&page=${page}`)
+      axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${page}`)
       .then(res => {
         this.props.setUsers(res.data.items);
-        this.props.setTotalCount(res.data.TotalCount);
+        this.props.setTotalCount(res.data.totalCount);
         this.props.isFetchingToggler(false)
     });
   }

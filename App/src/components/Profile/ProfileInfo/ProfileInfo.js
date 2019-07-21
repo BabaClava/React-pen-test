@@ -1,13 +1,19 @@
 import React from "react";
-import s from './ProfileInfo.module.sass'
+import s from './ProfileInfo.module.sass';
+import Preloader from '../../commons/Preloader';
+import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+  if(!props.profile) return <Preloader />
+
   return (
     <div>
       <div className={s.profileHeader}>
-        <img src="https://static.euronews.com/articles/stories/03/21/73/66/880x495_cmsv2_298e3b01-877d-57e3-9ce0-0542084c5af4-3217366.jpg"  alt='profileInfo'/>
       </div>
-      <div className={s.avatarContainer}>ava + description</div>
+      <div className={s.avatarContainer}>
+        <img src={props.profile.photos.large ? `http://localhost:3002/${props.profile.photos.large}` : avatarPlaceholder}  alt='profileInfo'/>
+        ava + description
+      </div>
     </div>
   );
 };

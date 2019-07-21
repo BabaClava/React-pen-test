@@ -31,8 +31,6 @@ const StaticServe = (client) => {
     const pathName = path.normalize(path.join(staticPath, client.req.url));
     const ext = path.parse(pathName).ext;
 
-    console.log(pathName);
-
     fs.access(pathName, fs.constants.F_OK, (err) => {
         if (err) {
             HttpError(client.res, 404, 'File not found');

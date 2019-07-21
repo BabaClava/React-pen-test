@@ -4,10 +4,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from 'reactstrap';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
-import Profile from './components/Profile/Profile';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
-import Loader from './assets/Loader';
+import Preloader from './components/commons/Preloader';
+import ProfileContainer from './components/Profile/ProfileContainer';
 
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
@@ -23,10 +23,10 @@ const App = (props) => {
           <Navbar />
         </Col>
         <Col tag="main"  className="content">
-          <Suspense fallback={<Loader/>}>  
+          <Suspense fallback={<Preloader/>}>  
             <Switch>
               <Redirect from="/" exact to="/profile" />
-              <Route path="/profile" render={() => <Profile />} />
+              <Route path="/profile/:id?" render={() => <ProfileContainer />} />
               <Route path="/dialogs" render={() => <DialogsContainer />} />
               <Route path="/users"   render={() => <UsersContainer /> } />
             </Switch>

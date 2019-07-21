@@ -8,7 +8,17 @@ const types = {
     'undefined': undefinedSerialize
 }
 
+const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Max-Age": 2592000, // 30 days
+        /** add other headers as per requirement */
+    };
+
 function Serializer(handler, client) {
+    for (const key in headers) {
+        client.res.setHeader(key, headers[key])
+    }
     types[typeof handler](handler, client);
 }
 
