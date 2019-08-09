@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="index.css">
+    <title>Registration</title>
+</head>
+<body>
+    <form>
+        <label for="login">Login</label>
+        <input type="text" name="login"><br/>
+        <label for="password1">Password 1</label>
+        <input type="password" name="password1"><br/>
+        <label for="password2">Password 2</label>
+        <input type="password" name="password2"><br/>
+        <button id='regBtn' type='submit'>Register</button>
+    </form>
+    <script>
+        const form = document.forms[0];
+        const login = form.login;
+        const pwd1 = form.password1;
+        const pwd2 = form.password2;
+        let errMsg;
+        
+        let salt;
+        const URL = 'http://localhost:3002/api/auth/register'
+        document.onload = getSalt();
+        function getSalt () {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        salt = xhr.getResponseHeader('Salt');
+                        return salt;
+                    } else {
+                        console.error(`Status code: ${xhr.status}`);
+                    }
+                }
+            }
+            xhr.open('GET', URL, true);
+            xhr.withCredentials = true;
+            xhr.send();
+        }
+            
+            form.onsubmit = (event) => {
+                event.preventDefault();
+                if (pwd1.value !== pwd2.value) {
+                    validErr('Passwords do not match')
+                    return;
+                } else {
+                    pwd1.classList.remove('error');
+                    pwd2.classList.remove('error');
+                    errMsg && errMsg.remove();
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = () => {
+                        console.log(xhr.responseText)
+                        if (xhr.readyState !== 4) return;
+                        switch (Number(xhr.responseText)) {
+                            case 1:
+                                validErr('Login already exist')
+                                break;
+                            case 2:
+                                validErr('Unaccepted error')
+                                break;
+                        }
+                    }
+                    xhr.open('POST', URL, true);
+                    xhr.withCredentials = true;
+                    xhr.setRequestHeader('Content-type', 'text/plain');
+                    let result = `${login.value}:${pwd1.value+salt}`;
+                    xhr.send(result);
+                }
+        }
+
+        function validErr(msg) {
+            pwd1.classList.add('error');
+            pwd2.classList.add('error');
+            errMsg = document.createElement('span');
+            errMsg.classList.add('errMsg');
+            errMsg.textContent = msg
+            form.append(errMsg);
+        }
+    </script>
+</body>
+</html>

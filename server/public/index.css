@@ -1,3 +1,6 @@
-h1 {
+.error {
+    border: 2px solid red;
+}
+.errMsg {
     color: red;
 }

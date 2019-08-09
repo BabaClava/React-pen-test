@@ -9,10 +9,11 @@ const types = {
 }
 
 const headers = {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "null",
         "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
         "Access-Control-Max-Age": 2592000, // 30 days
         /** add other headers as per requirement */
+        "Access-Control-Allow-Credentials": true
     };
 
 function Serializer(handler, client) {
