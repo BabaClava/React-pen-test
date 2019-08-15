@@ -52,12 +52,12 @@ const authorization = ({req, res}) => {
                             result.data.userId = user.userId;
                             const cookie = new Cookie(req, res);
                             const sid = RandomString();
-                            const expires = new Date(Date.now() + 10*60*1000)
-                            cookie.set('sid', sid, true, {'expires': expires});
+                            //const expires = new Date(Date.now() + 10*60*1000)
+                            cookie.set('sid', sid, true/*, {'expires': expires}*/);
                             col.updateOne({'userId': user.userId}, {$set: {'sid': sid}})
                         } else {
                             result.resultCode = 1;
-                            console.log(1);
+                            console.log('password mot match');
                         }
                     } else {
                         result.resultCode = 1;
@@ -67,7 +67,7 @@ const authorization = ({req, res}) => {
                 .catch(err => {
                     console.error(err);
                     result.resultCode = 1;
-                    console.log(1)
+                    console.log('user not found')
                 })
                 .finally((() => {
                     res.writeHead(200, {
@@ -80,14 +80,6 @@ const authorization = ({req, res}) => {
                     res.end(JSON.stringify(result))
                 }))
         });
-		//pass verification
-		//if
-		//set cookie
-		
-        // res.setHeader(
-        //     "Set-Cookie",
-        //     "token=123; path=/; domain=localhost; max-age=20; HttpOnly"
-        // );
     }
 };
 
