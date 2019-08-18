@@ -2,12 +2,12 @@ import React,{ Suspense, lazy } from 'react';
 import './App.sass';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from 'reactstrap';
-import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Preloader from './components/commons/Preloader';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
@@ -16,7 +16,7 @@ const App = (props) => {
   return (
     <Container className="app-wrapper p-0" no-gutters='true'>
       <Row noGutters>
-        <Header />
+        <HeaderContainer />
       </Row>
       <Row noGutters>
         <Col tag='aside' xs="2">

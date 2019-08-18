@@ -15,6 +15,7 @@ let random;
 //2 - other problem
 
 const session = ({req, res}) => {
+    //console.log(req.headers)
     const cookie = new Cookie(req, res);
     const sid = cookie.get()['sid'];
     if (sid) {
