@@ -3,9 +3,9 @@
 const defaultOptions = require('../config').cookieOptions;
 
 module.exports = class Cookie {
-    constructor(req, res) {
-        this.req = req;
-        this.res = res;
+    constructor(client) {
+        this.req = client.req;
+        this.res = client.res;
     }
     set(name, value, httpOnly = false ,options) {
         const params = {

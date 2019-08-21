@@ -1,5 +1,6 @@
 const TEST = 'TEST';
-const FOLLOW_CHANGE = 'FOLLOW_CHANGE';
+const FOLLOW = 'FOLLOW';
+const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
 const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT';
 const IS_FETCHING_TOGGLER = 'IS_FETCHING_TOGGLER';
@@ -20,12 +21,22 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state
             };
-        case FOLLOW_CHANGE:
+        case FOLLOW:
             return {
                 ...state,
                 users: state.users.map( user => {
                     if (user.id === action.id) {
-                        return {...user, follow: !user.follow}
+                        return {...user, follow: true}
+                    }
+                    return user;
+                })
+            };
+        case UNFOLLOW:
+            return {
+                ...state,
+                users: state.users.map( user => {
+                    if (user.id === action.id) {
+                        return {...user, follow: false}
                     }
                     return user;
                 })
@@ -59,8 +70,13 @@ export const test = () => ({
     type: TEST
 });
 
-export const followChange = (id) => ({
-    type: FOLLOW_CHANGE,
+export const follow = (id) => ({
+    type: FOLLOW,
+    id
+});
+
+export const unfollow = (id) => ({
+    type: UNFOLLOW,
     id
 });
 

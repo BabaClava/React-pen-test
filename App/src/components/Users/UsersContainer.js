@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { test, 
-         followChange, 
+         follow,
+         unfollow,
          setUsers, 
          setTotalCount, 
          isFetchingToggler,
@@ -14,7 +15,10 @@ import Paginator from '../commons/Paginator';
 class UsersAPI extends Component {
   componentDidMount() {
     this.props.isFetchingToggler(true);
-    axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${this.props.currentPage}`)
+    axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${this.props.currentPage}`,
+    {
+      withCredentials: true
+    })
     .then(res => {
       this.props.setUsers(res.data.items);
       this.props.setTotalCount(res.data.totalCount);
@@ -25,7 +29,10 @@ class UsersAPI extends Component {
   onPageChange = (page) => {
       this.props.setCurrentPage(page);
       this.props.isFetchingToggler(true);
-      axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${page}`)
+      axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${page}`,
+      {
+        withCredentials: true
+      })
       .then(res => {
         this.props.setUsers(res.data.items);
         this.props.setTotalCount(res.data.totalCount);
@@ -49,7 +56,8 @@ class UsersAPI extends Component {
             <Users
               users={this.props.users}
               onTestClick={this.props.onTestClick}
-              onFollowChange={this.props.onFollowChange}
+              follow={this.props.follow}
+              unfollow={this.props.unfollow}
             />
         </>
     );
@@ -68,7 +76,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     onTestClick: test,
-    onFollowChange: followChange,
+    follow,
+    unfollow,
     setUsers,
     setTotalCount,
     isFetchingToggler,

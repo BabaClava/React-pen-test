@@ -6,7 +6,8 @@ import s from './Users.module.sass';
 const Users = props => {
   let usersElements = props.users.map(el => (
     <User {...el}
-          onFollowChange={props.onFollowChange}
+          follow={props.follow}
+          unfollow={props.unfollow}
           key={el.id} />
   ));  
 

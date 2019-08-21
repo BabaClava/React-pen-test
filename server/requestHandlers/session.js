@@ -14,9 +14,9 @@ let random;
 //1 - invalid request
 //2 - other problem
 
-const session = ({req, res}) => {
+const session = (client) => {
     //console.log(req.headers)
-    const cookie = new Cookie(req, res);
+    const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
     if (sid) {
         const col = db.getClient().db('usersdb').collection('users');
@@ -50,12 +50,12 @@ const session = ({req, res}) => {
                 result.resultCode = 1
             })
             .finally(() => {
-                Serializer(result, {req, res})
+                Serializer(result, client)
             })
     } else {
         result.resultCode = 1;
         console.log('sid not found');
-        Serializer(result, {req, res});
+        Serializer(result, client);
     }
 }
 

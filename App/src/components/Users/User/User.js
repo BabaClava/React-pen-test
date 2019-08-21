@@ -3,10 +3,14 @@ import { Container, Row, Col } from 'reactstrap';
 import s from './User.module.sass';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 const User = (props) => {
-  let onFollowChange = (e) => { 
-    props.onFollowChange(Number(e.target.id)) 
+  let follow = (e) => { 
+    props.follow(Number(e.target.id)) 
+  };
+  let unfollow = (e) => { 
+    props.unfollow(Number(e.target.id)) 
   };  
 
   return (
@@ -16,13 +20,27 @@ const User = (props) => {
           <NavLink to={`/profile/${props.id}`}>
             <img src={props.photos.small ? `http://localhost:3002/${props.photos.small}`: avatarPlaceholder} className={s.avatar} alt='avatar'/>
           </NavLink>
-          <button
-            id={props.id}
-            className={s.followStatus}
-            onClick={onFollowChange}
-          >
-            {props.follow ? "Unfollow" : "Follow"}
-          </button>
+          {
+            props.followed 
+            ? <button onClick = {() => {
+                axios.delete(`http://localhost:3002/api/follow/${props.id}`,
+                {
+                  withCredentials: true
+                })
+                .then(res => {
+                  if (res.data.resultCode === '0') unfollow(props.id)
+                });
+              }}>Unfollow</button>
+            : <button onClick = {() => {
+                axios.post(`http://localhost:3002/api/follow/${props.id}`, {},
+                {
+                  withCredentials: true
+                })
+                .then(res => {
+                  if (res.data.resultCode === '0') follow(props.id)
+                });
+              }}>Follow</button>
+          }
         </Col>
         <Col className={s.container}>
           <Row className='h-100'>

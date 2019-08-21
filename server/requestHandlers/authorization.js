@@ -50,7 +50,7 @@ const authorization = ({req, res}) => {
                             result.resultCode = 0;
                             console.log(0)
                             result.data.userId = user.userId;
-                            const cookie = new Cookie(req, res);
+                            const cookie = new Cookie({req, res});
                             const sid = RandomString();
                             //const expires = new Date(Date.now() + 10*60*1000)
                             cookie.set('sid', sid, true/*, {'expires': expires}*/);
