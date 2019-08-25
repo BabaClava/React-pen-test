@@ -19,7 +19,7 @@ const users = client => {
     const sid = cookie.get()['sid'];
     console.log(sid)
     if (!sid) {
-        HttpError(client.res, 402, "Access denied");
+        HttpError(client.res, 401, "Access denied");
         return;
     }
 
@@ -27,7 +27,7 @@ const users = client => {
     col.findOne({'sid': sid})
         .then(user => {
             if (!user) {
-                HttpError(client.res, 402, "Access denied");
+                HttpError(client.res, 401, "Access denied");
                 return Promise.reject('not authorized user')
             } else {
                 return user;
