@@ -17,7 +17,6 @@ const users = client => {
 
     const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
-    console.log(sid)
     if (!sid) {
         HttpError(client.res, 401, "Access denied");
         return;

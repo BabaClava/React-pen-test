@@ -48,7 +48,6 @@ const authorization = ({req, res}) => {
                         const hash = hmac.digest('hex');
                         if (user.password === hash) {
                             result.resultCode = 0;
-                            console.log(0)
                             result.data.userId = user.userId;
                             const cookie = new Cookie({req, res});
                             const sid = RandomString();
@@ -61,7 +60,6 @@ const authorization = ({req, res}) => {
                         }
                     } else {
                         result.resultCode = 1;
-                        console.log(1);
                     }
                 })
                 .catch(err => {

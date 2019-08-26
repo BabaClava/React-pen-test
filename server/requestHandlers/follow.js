@@ -1,7 +1,8 @@
 'use strict'
 const Cookie = require('../utils/Cookie')
     , HttpError = require('../utils/HttpError')
-    , db = require('../db');
+    , db = require('../db')
+    , Serializer = require('../lib/Serializer')
 
 const errors = {
     400: "required uri params(ID = integer)",
@@ -10,15 +11,22 @@ const errors = {
     500: "Server error"
 }
 
+const response = {
+    'resultCode': 1,
+    'message': '',
+    'data': {}
+}
+
 const Follow = (client) => {
+    console.log(client.req.method)
     const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
     if (!sid) {
         HttpError(client.res, 401, errors[401]);
         return;
     }
-    const followId = client.req.params.id;
-    if (id) {
+    let followId = client.req.params.id;
+    if (followId) {
         followId = Number(followId)
     } else {
         HttpError(client.res, 400, errors[400]);
@@ -46,37 +54,33 @@ const Follow = (client) => {
             }
         })
         .then(result => {
-            Serialize(result, client)
+            Serializer(result, client)
         })
         .catch(code => {
+            console.error(code)
             HttpError(client.res, code, errors[code]);
         })
 
     function GET_Handler (user) {
-        if (user.followed.include(followId)) return 'true';
+        if (user.followed.includes(followId)) return 'true';
         else return 'false';
     }
 
     function POST_Handler(user, followId) {
-        const response = {
-            resultCode: 1,
-            message: '',
-            data: {}
-        }
-        if (user.followed.include(followId)) {
+        if (user.followed.includes(followId)) {
             return ({
                 ...response,
                 message: 'user already followed'
             })
         } else {
             return col.updateOne({userId: user.userId}, {
-                $push: {'followed': followedId}
+                $push: {'followed': followId}
                 }, (err, result) => {
                     if (err) return Promise.reject(500)
                     else {
                         return ({
                             ...response,
-                            resultCode = 0
+                            'resultCode': 0
                         })
                     }
                 })
@@ -84,20 +88,20 @@ const Follow = (client) => {
     }
 
     function DELETE_Handler(user, followId) {
-        if (user.followed.include(followId)) {
+        if (!user.followed.includes(followId)) {
             return ({
                 ...response,
-                message: 'user is not followed'
+                'message': 'user is not followed'
             })
         } else {
             return col.updateOne({userId: user.userId}, {
-                $pull: {'followed': followedId}
+                $pull: {'followed': followId}
                 }, (err, result) => {
                     if (err) return Promise.reject(500)
                     else {
                         return ({
                             ...response,
-                            resultCode = 0
+                            'resultCode': 0
                         })
                     }
                 })

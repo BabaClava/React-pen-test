@@ -33,9 +33,7 @@ const registration = ({req, res}) => {
                 .then(result => {
                     if (result !== null) {
                         resultCode = 1;
-                        console.log(1)
                     } else {
-                        console.log(0)
                         resultCode = 0;
                         let user = createUser(login, password);
                         col.insertOne(user)
@@ -44,7 +42,6 @@ const registration = ({req, res}) => {
                 .catch(err => {
                     console.error(err)
                     resultCode = 2;
-                    console.log(2);
                 })
         });
     }
@@ -82,7 +79,7 @@ function createUser(login, pwd) {
             'small': null,
             'large': null
         },
-        'followed': false,
+        'followed': [],
         'status': null,
         'uniqueUrlName': null
     }

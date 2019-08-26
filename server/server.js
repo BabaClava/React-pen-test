@@ -28,6 +28,7 @@ const routs = RoutingCreator({
 
 const app = http
 	.createServer((req, res) => {
+        console.log(req.url)
         
         if (req.url === '/') req.url = '/index.html';
 
