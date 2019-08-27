@@ -3,25 +3,19 @@ import { Container, Row, Col } from 'reactstrap';
 import s from './User.module.sass';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
+import { UserApi } from '../../../api';
 
 const User = (props) => {
   let follow = () => {
-    axios.post(`http://localhost:3002/api/follow/${props.id}`, {},
-    {
-      withCredentials: true
-    })
-    .then(res => {
-      if (res.data.resultCode === 0) props.follow(props.id)
+    UserApi.follow(props.id)
+    .then(data => {
+      if (data.resultCode === 0) props.follow(props.id)
     });
   };
   let unfollow = (e) => {
-    axios.delete(`http://localhost:3002/api/follow/${props.id}`,
-    {
-      withCredentials: true
-    })
-    .then(res => {
-      if (res.data.resultCode === 0) props.unfollow(props.id)
+    UserApi.unfollow(props.id)
+    .then(data => {
+      if (data.resultCode === 0) props.unfollow(props.id)
     })
   };  
 

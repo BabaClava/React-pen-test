@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import Profile from './Profile';
-import * as axios from 'axios';
 import {connect} from 'react-redux';
 import {setUserProfile} from '../../redux/profile-reducer';
 import {withRouter} from 'react-router-dom'
+import { UserApi } from '../../api';
 
 class ProfileContainer extends Component {
 
     componentDidMount() {
         const id = this.props.match.params.id || 2
-        axios.get(`http://localhost:3002/api/profile/${id}`)
-            .then((response) => this.props.setUserProfile(response.data))
+        UserApi.getProfile(id)
+            .then(data => this.props.setUserProfile(data))
     }
 
     render() { 

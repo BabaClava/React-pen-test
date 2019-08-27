@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import Header from './Header';
-import Axios from 'axios';
 import { connect } from 'react-redux';
 import { setUserData } from '../../redux/auth-reducer';
+import { UserApi } from '../../api';
 
 class HeaderContainer extends Component {
     componentDidMount() {
-        Axios
-            .get('http://localhost:3002/api/auth/me', {
-                withCredentials: true,
-            })
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    let {id, email, login} = response.data.data
+        UserApi.getAuth()
+            .then(data => {
+                if (data.resultCode === 0) {
+                    let {id, email, login} = data.data
                     this.props.setUserData(id, email, login);
                 }
             })

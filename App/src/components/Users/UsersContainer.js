@@ -8,20 +8,17 @@ import { test,
          isFetchingToggler,
          setCurrentPage } from '../../redux/Users-reducer';
 import Users from './Users';
-import * as axios from 'axios';
 import loader from '../../assets/img/loader.svg';
 import Paginator from '../commons/Paginator';
+import { UserApi } from '../../api';
 
-class UsersAPI extends Component {
+class UsersAPIComponent extends Component {
   componentDidMount() {
     this.props.isFetchingToggler(true);
-    axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${this.props.currentPage}`,
-    {
-      withCredentials: true
-    })
-    .then(res => {
-      this.props.setUsers(res.data.items);
-      this.props.setTotalCount(res.data.totalCount);
+    UserApi.getUsers(this.props.pageSize, this.props.currentPage)
+    .then(data => {
+      this.props.setUsers(data.items);
+      this.props.setTotalCount(data.totalCount);
       this.props.isFetchingToggler(false)
     });
   }
@@ -29,13 +26,10 @@ class UsersAPI extends Component {
   onPageChange = (page) => {
       this.props.setCurrentPage(page);
       this.props.isFetchingToggler(true);
-      axios.get(`http://localhost:3002/api/users?count=${this.props.pageSize}&page=${page}`,
-      {
-        withCredentials: true
-      })
-      .then(res => {
-        this.props.setUsers(res.data.items);
-        this.props.setTotalCount(res.data.totalCount);
+      UserApi.getUsers(this.props.pageSize, page)
+      .then(data => {
+        this.props.setUsers(data.items);
+        this.props.setTotalCount(data.totalCount);
         this.props.isFetchingToggler(false)
     });
   }
@@ -84,6 +78,6 @@ const mapDispatchToProps = {
     setCurrentPage
 }
 
-const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPI);
+const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent);
 
 export default UsersContainer;
