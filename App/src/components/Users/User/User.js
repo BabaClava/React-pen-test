@@ -6,11 +6,23 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 const User = (props) => {
-  let follow = (e) => { 
-    props.follow(Number(e.target.id)) 
+  let follow = () => {
+    axios.post(`http://localhost:3002/api/follow/${props.id}`, {},
+    {
+      withCredentials: true
+    })
+    .then(res => {
+      if (res.data.resultCode === 0) props.follow(props.id)
+    });
   };
-  let unfollow = (e) => { 
-    props.unfollow(Number(e.target.id)) 
+  let unfollow = (e) => {
+    axios.delete(`http://localhost:3002/api/follow/${props.id}`,
+    {
+      withCredentials: true
+    })
+    .then(res => {
+      if (res.data.resultCode === 0) props.unfollow(props.id)
+    })
   };  
 
   return (
@@ -22,24 +34,8 @@ const User = (props) => {
           </NavLink>
           {
             props.followed 
-            ? <button onClick = {() => {
-                axios.delete(`http://localhost:3002/api/follow/${props.id}`,
-                {
-                  withCredentials: true
-                })
-                .then(res => {
-                  if (res.data.resultCode === '0') unfollow(props.id)
-                });
-              }}>Unfollow</button>
-            : <button onClick = {() => {
-                axios.post(`http://localhost:3002/api/follow/${props.id}`, {},
-                {
-                  withCredentials: true
-                })
-                .then(res => {
-                  if (res.data.resultCode === '0') follow(props.id)
-                });
-              }}>Follow</button>
+            ? <button onClick = {unfollow}>Unfollow</button>
+            : <button onClick = {follow}>Follow</button>
           }
         </Col>
         <Col className={s.container}>

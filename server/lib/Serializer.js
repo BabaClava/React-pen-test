@@ -13,8 +13,7 @@ const headers = {
         "Access-Control-Allow-Methods": "OPTIONS, POST, GET, DELETE",
         "Access-Control-Max-Age": 2592000, // 30 days
         /** add other headers as per requirement */
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Headers": 'Accept, Content-Type, Origin'
+        "Access-Control-Allow-Credentials": true
     };
 
 function Serializer(handler, client) {

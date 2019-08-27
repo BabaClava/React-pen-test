@@ -18,7 +18,10 @@ const response = {
 }
 
 const Follow = (client) => {
-    console.log(client.req.method)
+    if (client.req.method === 'OPTIONS') {
+        client.res.writeHead(200, {"Access-Control-Allow-Headers": 'Accept, Content-Type, Origin'})
+        client.res.end()
+    }
     const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
     if (!sid) {
@@ -57,7 +60,6 @@ const Follow = (client) => {
             Serializer(result, client)
         })
         .catch(code => {
-            console.error(code)
             HttpError(client.res, code, errors[code]);
         })
 
@@ -75,14 +77,18 @@ const Follow = (client) => {
         } else {
             return col.updateOne({userId: user.userId}, {
                 $push: {'followed': followId}
-                }, (err, result) => {
-                    if (err) return Promise.reject(500)
-                    else {
-                        return ({
-                            ...response,
-                            'resultCode': 0
-                        })
-                    }
+                })
+                .then(() => {
+                    return Promise.resolve({
+                        ...response,
+                        'resultCode': 0
+                    })
+                })
+                .catch(err => {
+                    return Promise.reject({
+                        ...response,
+                        'message': 'db error'
+                    })
                 })
         }
     }
@@ -96,14 +102,18 @@ const Follow = (client) => {
         } else {
             return col.updateOne({userId: user.userId}, {
                 $pull: {'followed': followId}
-                }, (err, result) => {
-                    if (err) return Promise.reject(500)
-                    else {
-                        return ({
-                            ...response,
-                            'resultCode': 0
-                        })
-                    }
+                })
+                .then(() => {
+                    return Promise.resolve({
+                        ...response,
+                        'resultCode': 0
+                    })
+                })
+                .catch(err => {
+                    return Promise.reject({
+                        ...response,
+                        'message': 'db error'
+                    })
                 })
         }
     }
