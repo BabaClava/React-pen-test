@@ -6,7 +6,8 @@ import { test,
          setUsers, 
          setTotalCount, 
          isFetchingToggler,
-         setCurrentPage } from '../../redux/Users-reducer';
+         setCurrentPage,
+         followingInProgressToggler } from '../../redux/Users-reducer';
 import Users from './Users';
 import loader from '../../assets/img/loader.svg';
 import Paginator from '../commons/Paginator';
@@ -52,6 +53,9 @@ class UsersAPIComponent extends Component {
               onTestClick={this.props.onTestClick}
               follow={this.props.follow}
               unfollow={this.props.unfollow}
+              isFetching={this.props.isFetching}
+              followingInProgress={this.props.followingInProgress}
+              followingInProgressToggler={this.props.followingInProgressToggler}
             />
         </>
     );
@@ -64,7 +68,8 @@ const mapStateToProps = (state) => {
         isFetching: state.usersPage.isFetching,
         currentPage: state.usersPage.currentPage,
         pageSize: state.usersPage.pageSize,
-        totalCount: state.usersPage.totalCount
+        totalCount: state.usersPage.totalCount,
+        followingInProgress: state.usersPage.followingInProgress
     }
 }
 
@@ -75,6 +80,7 @@ const mapDispatchToProps = {
     setUsers,
     setTotalCount,
     isFetchingToggler,
+    followingInProgressToggler,
     setCurrentPage
 }
 

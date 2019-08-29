@@ -8,6 +8,9 @@ const Users = props => {
     <User {...el}
           follow={props.follow}
           unfollow={props.unfollow}
+          isFetching={props.isFetching}
+          followingInProgress={props.followingInProgress}
+          followingInProgressToggler={props.followingInProgressToggler}
           key={el.id} />
   ));  
 
