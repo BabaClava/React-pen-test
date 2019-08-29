@@ -3,24 +3,13 @@ import { Container, Row, Col } from 'reactstrap';
 import s from './User.module.sass';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 import { NavLink } from 'react-router-dom';
-import { UserApi } from '../../../api';
 
 const User = (props) => {
   let follow = () => {
-    props.followingInProgressToggler(true, props.id)
-    UserApi.follow(props.id)
-    .then(data => {
-      if (data.resultCode === 0) props.follow(props.id);
-      props.followingInProgressToggler(false, props.id)
-    });
+    props.follow(props.id);
   };
-  let unfollow = (e) => {
-    props.followingInProgressToggler(true, props.id)
-    UserApi.unfollow(props.id)
-    .then(data => {
-      if (data.resultCode === 0) props.unfollow(props.id);
-      props.followingInProgressToggler(false, props.id);
-    })
+  let unfollow = () => {
+    props.unfollow(props.id);
   };  
   return (
     <Container className={s.container}>

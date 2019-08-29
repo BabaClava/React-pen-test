@@ -3,36 +3,19 @@ import { connect } from 'react-redux';
 import { test, 
          follow,
          unfollow,
-         setUsers, 
-         setTotalCount, 
-         isFetchingToggler,
-         setCurrentPage,
-         followingInProgressToggler } from '../../redux/Users-reducer';
+         getUsers,
+         getPage } from '../../redux/Users-reducer';
 import Users from './Users';
 import loader from '../../assets/img/loader.svg';
 import Paginator from '../commons/Paginator';
-import { UserApi } from '../../api';
 
 class UsersAPIComponent extends Component {
   componentDidMount() {
-    this.props.isFetchingToggler(true);
-    UserApi.getUsers(this.props.pageSize, this.props.currentPage)
-    .then(data => {
-      this.props.setUsers(data.items);
-      this.props.setTotalCount(data.totalCount);
-      this.props.isFetchingToggler(false)
-    });
+    this.props.getUsers(this.props.pageSize, this.props.currentPage)
   }
 
   onPageChange = (page) => {
-      this.props.setCurrentPage(page);
-      this.props.isFetchingToggler(true);
-      UserApi.getUsers(this.props.pageSize, page)
-      .then(data => {
-        this.props.setUsers(data.items);
-        this.props.setTotalCount(data.totalCount);
-        this.props.isFetchingToggler(false)
-    });
+    this.props.getPage(this.props.pageSize ,page)
   }
 
   get pagesCount() {
@@ -53,9 +36,7 @@ class UsersAPIComponent extends Component {
               onTestClick={this.props.onTestClick}
               follow={this.props.follow}
               unfollow={this.props.unfollow}
-              isFetching={this.props.isFetching}
               followingInProgress={this.props.followingInProgress}
-              followingInProgressToggler={this.props.followingInProgressToggler}
             />
         </>
     );
@@ -65,7 +46,6 @@ class UsersAPIComponent extends Component {
 const mapStateToProps = (state) => {
     return {
         users: state.usersPage.users,
-        isFetching: state.usersPage.isFetching,
         currentPage: state.usersPage.currentPage,
         pageSize: state.usersPage.pageSize,
         totalCount: state.usersPage.totalCount,
@@ -77,11 +57,8 @@ const mapDispatchToProps = {
     onTestClick: test,
     follow,
     unfollow,
-    setUsers,
-    setTotalCount,
-    isFetchingToggler,
-    followingInProgressToggler,
-    setCurrentPage
+    getUsers,
+    getPage
 }
 
 const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent);

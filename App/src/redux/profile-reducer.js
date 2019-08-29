@@ -1,3 +1,5 @@
+import { UserApi } from "../api";
+
 /* eslint-disable no-lone-blocks */
 const ADD_POST = "ADD-POST";
 const UPDATE_POST_TEXT = "UPDATE-POST-TEXT";
@@ -45,6 +47,7 @@ const profileReducer = (state = initialState, action) => {
   }
 };
 
+//Action Creators
 export const addPost = () => ({
   type: ADD_POST
 });
@@ -57,5 +60,13 @@ export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,
   profile
 })
+
+//Thunks
+export const getProfile = id => {
+  return dispatch => {
+    UserApi.getProfile(id)
+      .then(data => dispatch(setUserProfile(data)))
+  }
+}
 
 export default profileReducer;

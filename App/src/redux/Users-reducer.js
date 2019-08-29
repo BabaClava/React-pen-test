@@ -1,3 +1,5 @@
+import { UserApi } from "../api";
+
 const TEST = 'TEST';
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -41,7 +43,6 @@ const usersReducer = (state = initialState, action) => {
                         return {...user, followed: false}
                     }
                     return user;
-                    
                 })
             };
         case SET_USERS:
@@ -76,16 +77,17 @@ const usersReducer = (state = initialState, action) => {
     }
 }
 
+//Action Creators
 export const test = () => ({
     type: TEST
 });
 
-export const follow = (id) => ({
+export const followSuccess = (id) => ({
     type: FOLLOW,
     id
 });
 
-export const unfollow = (id) => ({
+export const unfollowSuccess = (id) => ({
     type: UNFOLLOW,
     id
 });
@@ -115,5 +117,53 @@ export const setCurrentPage = (page) => ({
     type: SET_CURRENT_PAGE,
     page
 });
+
+//Thunks
+export const getUsers = (pageSize, currentPage) => {
+    return (dispatch) => {
+        dispatch(isFetchingToggler(true));
+        UserApi.getUsers(pageSize, currentPage)
+            .then(data => {
+                dispatch(setUsers(data.items));
+                dispatch(setTotalCount(data.totalCount));
+                dispatch(isFetchingToggler(false));
+        });
+    }
+};
+
+export const getPage = (pageSize, page) => {
+    return (dispatch) => {
+        dispatch(setCurrentPage(page));
+        dispatch(isFetchingToggler(true));
+        UserApi.getUsers(pageSize, page)
+        .then(data => {
+            dispatch(setUsers(data.items));
+            dispatch(setTotalCount(data.totalCount));
+            dispatch(isFetchingToggler(false));
+        });
+    }
+};
+
+export const follow = (id) => {
+    return (dispatch) => {
+        dispatch(followingInProgressToggler(true, id));
+        UserApi.follow(id)
+        .then(data => {
+            if (data.resultCode === 0) dispatch(followSuccess(id));
+            dispatch(followingInProgressToggler(false, id));
+        });
+    };
+};
+
+export const unfollow = (id) => {
+    return (dispatch) => {
+        dispatch(followingInProgressToggler(true, id));
+        UserApi.unfollow(id)
+        .then(data => {
+            if (data.resultCode === 0) dispatch(unfollowSuccess(id));
+            dispatch(followingInProgressToggler(false, id));
+        })
+      };
+}
 
 export default usersReducer;
