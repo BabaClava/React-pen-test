@@ -8,6 +8,8 @@ import { test,
 import Users from './Users';
 import loader from '../../assets/img/loader.svg';
 import Paginator from '../commons/Paginator';
+import {compose} from 'redux';
+import { withAuthRedirect } from '../../hoc/withRedirect';
 
 class UsersAPIComponent extends Component {
   componentDidMount() {
@@ -61,6 +63,7 @@ const mapDispatchToProps = {
     getPage
 }
 
-const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersAPIComponent);
-
-export default UsersContainer;
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthRedirect
+)(UsersAPIComponent);

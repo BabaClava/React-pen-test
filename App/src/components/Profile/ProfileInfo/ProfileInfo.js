@@ -2,6 +2,7 @@ import React from "react";
 import s from './ProfileInfo.module.sass';
 import Preloader from '../../commons/Preloader';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
+import StatusBar from './StatusBar/StatusBar'
 
 const ProfileInfo = (props) => {
   if(!props.profile) return <Preloader />
@@ -13,6 +14,9 @@ const ProfileInfo = (props) => {
       <div className={s.avatarContainer}>
         <img src={props.profile.photos.large ? `http://localhost:3002/${props.profile.photos.large}` : avatarPlaceholder}  alt='profileInfo'/>
         ava + description
+      </div>
+      <div>
+        <StatusBar status={'test'}/>
       </div>
     </div>
   );

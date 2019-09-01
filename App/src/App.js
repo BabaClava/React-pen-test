@@ -8,11 +8,11 @@ import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Preloader from './components/commons/Preloader';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
+import Login from './components/Login/Login'
 
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
-const App = (props) => {
-  
+const App = () => {
   return (
     <Container className="app-wrapper p-0" no-gutters='true'>
       <Row noGutters>
@@ -25,10 +25,11 @@ const App = (props) => {
         <Col tag="main"  className="content">
           <Suspense fallback={<Preloader/>}>  
             <Switch>
-              <Redirect from="/" exact to="/profile" />
+              <Redirect from="/" exact to="/login" />
               <Route path="/profile/:id?" render={() => <ProfileContainer />} />
               <Route path="/dialogs" render={() => <DialogsContainer />} />
-              <Route path="/users"   render={() => <UsersContainer /> } />
+              <Route path="/users" render={() => <UsersContainer /> } />
+              <Route path="/login" render={() => <Login />} />
             </Switch>
           </Suspense> 
         </Col>

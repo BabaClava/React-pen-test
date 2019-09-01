@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Profile from './Profile';
 import {connect} from 'react-redux';
 import {getProfile} from '../../redux/profile-reducer';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+import {withAuthRedirect} from '../../hoc/withRedirect'
+import {compose} from 'redux';
 
 class ProfileContainer extends Component {
 
@@ -26,4 +28,8 @@ const mapDispatchToProps = {
     getProfile
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProfileContainer));
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer)
