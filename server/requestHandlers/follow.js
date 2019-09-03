@@ -2,7 +2,7 @@
 const Cookie = require('../utils/Cookie')
     , HttpError = require('../utils/HttpError')
     , db = require('../db')
-    , Serializer = require('../lib/Serializer')
+    , Serializer = require('../lib/Serializer');
 
 const errors = {
     400: "required uri params(ID = integer)",
@@ -29,9 +29,8 @@ const Follow = (client) => {
         return;
     }
     let followId = client.req.params.id;
-    if (followId) {
-        followId = Number(followId)
-    } else {
+    followId = Number(followId)
+    if (!followId) {
         HttpError(client.res, 400, errors[400]);
         return;
     }
@@ -39,7 +38,7 @@ const Follow = (client) => {
     col.findOne({'sid': sid})
         .then(user => {
             if (!user) {
-                Promise.reject(401)
+                return Promise.reject(401)
             } else {
                 return user;
             }
@@ -53,7 +52,7 @@ const Follow = (client) => {
                 case 'DELETE':
                     return DELETE_Handler(user, followId);
                 default:
-                    Promise.reject(405);
+                    return Promise.reject(405);
             }
         })
         .then(result => {
@@ -110,7 +109,7 @@ const Follow = (client) => {
                     })
                 })
                 .catch(err => {
-                    return Promise.reject({
+                    return Promise.resolve({
                         ...response,
                         'message': 'db error'
                     })
