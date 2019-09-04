@@ -29,7 +29,8 @@ const Status = (client) => {
         HttpError(client.res, 401, errors[401]);
         return;
     }
-    const reqId = client.req.params.id;
+    let reqId = client.req.params.id;
+    if(reqId) reqId = Number(reqId);
 
     const col = db.getClient().db("usersdb").collection("users");
     col.findOne({'sid': sid})
@@ -63,7 +64,7 @@ const Status = (client) => {
                 return Promise.resolve(user.status || '')
             })
             .catch(err => {
-                return Promise.reject({
+                return Promise.resolve({
                     ...response,
                     message: 'db error'
                 });

@@ -11,15 +11,9 @@ export const UserApi = {
             .get(`users?count=${pageSize}&page=${currentPage}`)
             .then(res => res.data)
     },
-    getAuth() {
-        return instance
-            .get('auth/me')
-            .then(res => res.data)
-    },
     getProfile(id) {
-        return instance
-            .get(`profile/${id}`)
-            .then(res => res.data)
+        console.warn('unsafe method, pls use ProfileApi');
+        return ProfileApi.getProfile(id)
     },
     follow(id) {
         return instance
@@ -31,4 +25,30 @@ export const UserApi = {
             .delete(`follow/${id}`)
             .then(res => res.data)
     }
+}
+
+export const ProfileApi = {
+    getProfile(id) {
+        return instance
+            .get(`profile/${id}`)
+            .then(res => res.data)
+    },
+    getStatus(id) {
+        return instance
+            .get(`profile/status/${id}`)
+            .then(res => res.data)
+    },
+    updateStatus(status) {
+        return instance
+            .put('profile/status', {status: status})
+            .then(res => res.data)
+    }
+}
+
+export const AuthApi = {
+    getAuth() {
+        return instance
+            .get('auth/me')
+            .then(res => res.data)
+    },
 }

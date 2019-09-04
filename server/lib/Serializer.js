@@ -10,7 +10,7 @@ const types = {
 
 const headers = {
         "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS, POST, GET, DELETE",
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET, DELETE, PUT",
         "Access-Control-Max-Age": 2592000, // 30 days
         /** add other headers as per requirement */
         "Access-Control-Allow-Credentials": true

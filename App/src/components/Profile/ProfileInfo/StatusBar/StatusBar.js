@@ -5,34 +5,55 @@ class StatusBar extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            isEdit: false 
-        }
-        this.editStatusToggler = this.editStatusToggler.bind(this)
+            isEdit: false,
+            status: this.props.status
+        };
+        this.editStatusStart = this.editStatusStart.bind(this);
+        this.editStatusEnd = this.editStatusEnd.bind(this);
+        this.onStatusChange = this.onStatusChange.bind(this);
     }
-    editStatusToggler() {
+    componentDidUpdate(prevProps) {
+        if (prevProps.status !== this.props.status) {
+            this.setState({
+                status: this.state.status
+            });
+        }
+    }
+    editStatusStart() {
         this.setState({
-            isEdit: !this.state.isEdit
-        })
+            isEdit: true
+        });
+    }
+    editStatusEnd() {
+        this.setState({
+            isEdit: false
+        });
+        this.props.updateStatus(this.state.status);
+    }
+    onStatusChange(e) {
+        this.setState({
+            status: e.currentTarget.value
+        });
     }
     
     render() { 
         return ( 
             <>
                 {
-                    
                     this.state.isEdit
-                        ? <div>
-                            <input type="text" 
-                                value={this.props.status} 
-                                autoFocus={true}
-                                onBlur={this.editStatusToggler}
-                            />
-                          </div>
-                        : <div>
-                            <span className={s.statusBar}
-                                onDoubleClick={this.editStatusToggler}
-                            >{this.props.status}</span>
-                          </div>
+                    ? <div>
+                        <input type="text" 
+                            value={this.state.status}
+                            autoFocus={true}
+                            onBlur={this.editStatusEnd}
+                            onChange={this.onStatusChange}
+                        />
+                      </div>
+                    : <div>
+                        <span className={s.statusBar}
+                            onDoubleClick={this.editStatusStart}
+                        >{this.props.status || '===='}</span>
+                      </div>
                 }
             </>
          );
