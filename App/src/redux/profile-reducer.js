@@ -5,7 +5,6 @@ const ADD_POST = "ADD-POST";
 const UPDATE_POST_TEXT = "UPDATE-POST-TEXT";
 const SET_USER_PROFILE = 'SET-USER-PROFILE';
 const SET_USER_STATUS = 'SET_USER_STATUS';
-const UPDATE_USER_STATUS = 'UPDATE_USER_STATUS';
 
 let initialState = {
   postsData: [
