@@ -1,9 +1,7 @@
 import { ProfileApi } from "../api";
 
-/* eslint-disable no-lone-blocks */
 const ADD_POST = "ADD-POST";
-const UPDATE_POST_TEXT = "UPDATE-POST-TEXT";
-const SET_USER_PROFILE = 'SET-USER-PROFILE';
+const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_USER_STATUS = 'SET_USER_STATUS';
 
 let initialState = {
@@ -12,7 +10,6 @@ let initialState = {
     { id: 2, post: "post 2", likesCount: 13 },
     { id: 3, post: "post 3", likesCount: 14 }
   ],
-  newPostText: "",
   profile: null,
   status: ''
 };
@@ -20,25 +17,18 @@ let initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST: {
-      let newPostText = state.newPostText;
       return {
         ...state,
         postsData: [
           ...state.postsData,
           {
             id: state.postsData.length,
-            post: newPostText,
+            post: action.post,
             likesCount: 0
           }
-        ],
-        newPostText: ""
+        ]
       };
     }
-    case UPDATE_POST_TEXT:
-      return {
-        ...state,
-        newPostText: action.newText
-      };
     case SET_USER_PROFILE:
       return {
         ...state,
@@ -55,12 +45,9 @@ const profileReducer = (state = initialState, action) => {
 };
 
 //Action Creators
-export const addPost = () => ({
-  type: ADD_POST
-});
-export const updatePostText = text => ({
-  type: UPDATE_POST_TEXT,
-  newText: text
+export const addPost = (post) => ({
+  type: ADD_POST,
+  post
 });
 export const setUserProfile = (profile) => ({
   type: SET_USER_PROFILE,

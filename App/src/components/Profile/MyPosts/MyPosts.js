@@ -1,6 +1,8 @@
 import React from "react";
 import s from "./MyPosts.module.sass";
 import Post from "./Post/Post";
+import MessageForm from '../../commons/MessageForm';
+import {reduxForm} from 'redux-form';
 
 const MyPosts = props => {
   
@@ -8,18 +10,13 @@ const MyPosts = props => {
     <Post post={el.post} likesCount={el.likesCount} key={el.post} />
   ));
 
-  let onPostChange = (e) => props.onPostChange(e.target.value);
-  let onPostSend = () => props.onPostSend();
+  let onPostSend = (data) => props.onPostSend(data.message);
+
+  const Form = reduxForm({form: 'myPost'})(MessageForm);
 
   return (
     <div className={s.postContainer}>
-      <div>
-        <textarea
-          value={props.newPostText}
-          onChange={onPostChange}
-          />
-        <button onClick={onPostSend}>Add post</button>
-      </div>
+      <Form onSubmit={onPostSend} />  
       {postsElements}
     </div>
   );
