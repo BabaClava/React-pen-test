@@ -1,8 +1,7 @@
 import React from "react";
 import s from "./MyPosts.module.sass";
 import Post from "./Post/Post";
-import MessageForm from '../../commons/MessageForm';
-import {reduxForm} from 'redux-form';
+import MyPostsForm from '../../commons/Forms/MyPostsForm';
 
 const MyPosts = props => {
   
@@ -12,11 +11,9 @@ const MyPosts = props => {
 
   let onPostSend = (data) => props.onPostSend(data.message);
 
-  const Form = reduxForm({form: 'myPost'})(MessageForm);
-
   return (
     <div className={s.postContainer}>
-      <Form onSubmit={onPostSend} />  
+      <MyPostsForm onSubmit={onPostSend} />  
       {postsElements}
     </div>
   );

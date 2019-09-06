@@ -2,8 +2,7 @@ import React from 'react';
 import {Row, Col} from 'reactstrap';
 import Dialog from './Dialog/Dialog';
 import Message from './Message/Message';
-import { reduxForm } from 'redux-form'
-import MessageForm from '../commons/MessageForm'
+import DialogsForm from '../commons/Forms/DialogsForm'
 
 const Dialogs = (props) => {
     let dialogsElements = props.dialogsData
@@ -14,7 +13,6 @@ const Dialogs = (props) => {
 
     let onMessageSend = (data) => props.onMessageSend(data.message);
 
-    const Form = reduxForm({form:'dialogs'})(MessageForm);
     return (
       <Row className="dialogsContainer p-3">
         <Col xs="2" className="dialogsItems">
@@ -22,7 +20,7 @@ const Dialogs = (props) => {
         </Col>
         <Col className="messages">
           <div>{messageElements}</div>
-          <Form onSubmit={onMessageSend}/>
+          <DialogsForm onSubmit={onMessageSend}/>
         </Col>
       </Row>
     );
