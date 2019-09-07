@@ -5,12 +5,11 @@ export const TextField = ({
     input,
     placeholder,
     type,
-    inputClassName,
     errorClassName,
     meta: { touched, error, warning }
   }) => (
     <div>
-        <input {...input} placeholder={placeholder} type={type} className={inputClassName}/>
+        <input {...input} placeholder={placeholder} type={type}/>
         {touched && error && <span className={errorClassName || s.textError}>{error}</span>}
     </div>
 )

@@ -1,5 +1,7 @@
 "use strict";
 
+//alternative login method
+
 const RandomString = require('../utils/RandomString')
     , db = require('../db')
     , crypto = require('crypto')

@@ -10,7 +10,7 @@ const Router = require('./lib/Router')
     , usersHandler = require('./requestHandlers/users')
     , profileHandler = require('./requestHandlers/profile')
     , registrationHandler = require('./requestHandlers/registration')
-    , authorizationHandler = require('./requestHandlers/authorization')
+    //, authorizationHandler = require('./requestHandlers/authorization')
     , sessionHandler = require('./requestHandlers/session')
     , followHandler = require('../server/requestHandlers/follow')
     , statusHandler = require('./requestHandlers/status');
@@ -22,7 +22,7 @@ const routs = RoutingCreator({
     '/api/profile/status/:id': statusHandler,
     '/api/profile/:id': profileHandler,     //like an express, but we can use ANY SPECIFIC character and replace his later
     '/api/auth/me': sessionHandler,
-    '/api/auth/login': authorizationHandler,
+    '/api/auth/login': 'login',
     '/api/auth/register': registrationHandler,
     '/api/follow/:id': followHandler
 })

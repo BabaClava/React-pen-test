@@ -12,7 +12,6 @@ const dialogTextForm = (props) => {
                 type='text'
                 component={TextField}
                 placeholder='message'
-                inputClassName=''
                 errorClassName=''
             />
             <button disabled={pristine}></button>
