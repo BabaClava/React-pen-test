@@ -13,7 +13,8 @@ const Router = require('./lib/Router')
     //, authorizationHandler = require('./requestHandlers/authorization')
     , sessionHandler = require('./requestHandlers/session')
     , followHandler = require('../server/requestHandlers/follow')
-    , statusHandler = require('./requestHandlers/status');
+    , statusHandler = require('./requestHandlers/status')
+    , loginHandler = require('./requestHandlers/login');
 
 const PORT = config.port;
 
@@ -22,7 +23,7 @@ const routs = RoutingCreator({
     '/api/profile/status/:id': statusHandler,
     '/api/profile/:id': profileHandler,     //like an express, but we can use ANY SPECIFIC character and replace his later
     '/api/auth/me': sessionHandler,
-    '/api/auth/login': 'login',
+    '/api/auth/login': loginHandler,
     '/api/auth/register': registrationHandler,
     '/api/follow/:id': followHandler
 })

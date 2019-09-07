@@ -13,8 +13,9 @@ module.exports = class Cookie {
             ...options
         }
         const {path, domain, expires} = params;
-        const cookie = `${name}=${value}; expires=${expires}; domain=${domain}; path=${path}`;
-        httpOnly && cookie + '; HttpOnly';
+        let cookie = `${name}=${value}; domain=${domain}; path=${path}`;
+        cookie = expires && cookie + `; expires=${expires}`;
+        cookie = httpOnly && cookie + '; HttpOnly';
         this.res.setHeader('Set-Cookie', cookie);
     }
     get() {

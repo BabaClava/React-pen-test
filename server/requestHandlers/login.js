@@ -63,12 +63,12 @@ function POST_Handler({req, res}) {
         })
     })
     .then(data => {
-        formData = data
+        formData = {...formData, ...data};
         return col.findOne({fullName: formData.login})
     })
-    .them((user) => {
+    .then(user => {
         const hmac = crypto.createHmac('sha1', config.secret);
-        hmac.update(formData.password)
+        hmac.update((formData.password).toString());
         const hash = hmac.digest('hex');
         if (user.password === hash) {
             return Promise.resolve(user)
@@ -79,24 +79,27 @@ function POST_Handler({req, res}) {
     .then((user) => {
         const cookie = new Cookie({req, res});
         const sid = randomString();
-        cookie.set('sid', sid, true);
         if (formData.rememberMe) {
+            const expires = 'Fri, 01 Jan 2100 00:00:00 GMT'
+            cookie.set('sid', sid, true, {'expires': expires})
             return col.updateOne({userId: user.userId}, {
                 $set: {sid: sid}
             })
+        } else {
+            cookie.set('sid', sid, true);
         }
     })
     .then(() => {
         Serializer({
             ...response,
-            statusCode: 0
+            resultCode: 0
         }, {req, res})
     })
     .catch((err) => {
         if (typeof(err) === 'Number') {
             Serializer({
                 ...response,
-                statusCode: 1,
+                resultCode: 1,
                 message: `${errors[err]}`
             }, {req, res})
         } else {
@@ -107,7 +110,7 @@ function POST_Handler({req, res}) {
 
 function DELETE_Handler(client) {
     const cookie = new Cookie(client)
-    const sid = cookie.get()[sid];
+    const sid = cookie.get()['sid'];
     if (!sid) {
         HttpError(client.res, 401, errors[401]);
         return;
