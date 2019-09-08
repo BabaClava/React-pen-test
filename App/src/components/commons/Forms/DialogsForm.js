@@ -14,7 +14,7 @@ const dialogTextForm = (props) => {
                 placeholder='message'
                 errorClassName=''
             />
-            <button disabled={pristine}></button>
+            <button disabled={pristine}>Send</button>
         </form>
     )
 }

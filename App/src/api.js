@@ -52,6 +52,7 @@ export const AuthApi = {
             .then(res => res.data)
     },
     logIn(data) {
+        console.log(data)
         return instance
             .post('auth/login', data)
             .then(res => res.data)

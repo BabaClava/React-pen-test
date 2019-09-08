@@ -4,12 +4,13 @@ import {Col} from 'reactstrap';
 import {NavLink} from 'react-router-dom';
 
 const Header = (props) => {
+  const logout = props.logOut;
     return (
       <Col tag='header' className={s.header}>header
         <div className={s.loginBlock}>
           {
             props.isAuth 
-            ? props.login
+            ? <><div>{props.login}</div><button onClick={logout}>Log Out</button></>
             : <NavLink to={'/login'}>Login</NavLink>
           }
         </div>

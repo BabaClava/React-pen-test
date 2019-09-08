@@ -49,8 +49,7 @@ export const logIn = (loginData) => {
         AuthApi.logIn(loginData)
             .then(data => {
                 if (data.resultCode === 0) {
-                    let {id, email, login} = data.data
-                    dispatch(setUserData(id, email, login, true))
+                    dispatch(getAuth())
                 }
             })
     }

@@ -15,10 +15,8 @@ let random;
 //2 - other problem
 
 const session = (client) => {
-    //console.log(req.headers)
     const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
-    console.log(sid)
     if (sid) {
         const col = db.getClient().db('usersdb').collection('users');
         col
@@ -26,7 +24,6 @@ const session = (client) => {
             .then(user => {
                 if (user) {
                     result.resultCode = 0;
-                    console.log(0)
                     result.data = {
                         id: user.userId,
                         login: user.fullName,
@@ -36,15 +33,6 @@ const session = (client) => {
                     result.resultCode = 1;
                     return Promise.reject('user not found');
                 }
-            })
-            .then (() => {
-                random = Random();
-                return col
-                    .updateOne({'sid': sid}, {$set: {'sid': random}})
-                        
-            })
-            .then(() => {
-                cookie.set('sid', random, true)
             })
             .catch(err => {
                 console.error(err)

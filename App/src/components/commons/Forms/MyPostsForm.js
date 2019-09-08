@@ -13,7 +13,7 @@ const MyPostsTextForm = (props) => {
                 component={TextField}
                 placeholder='post text'
             />
-            <button disabled={pristine}></button>
+            <button disabled={pristine}>Send</button>
         </form>
     )
 }

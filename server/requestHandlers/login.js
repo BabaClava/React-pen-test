@@ -73,8 +73,8 @@ function POST_Handler({req, res}) {
         if (user.password === hash) {
             response.data = {
                 id: user.userId,
-                login: user.fullName,
-                email: user.uniqueUrlName
+                // login: user.fullName,
+                // email: user.uniqueUrlName
             }
             return Promise.resolve(user)
         } else {
@@ -103,9 +103,9 @@ function POST_Handler({req, res}) {
     .catch((err) => {
         if (typeof(err) === 'Number') {
             Serializer({
+                ...response,
                 resultCode: 1,
                 message: `${errors[err]}`,
-                data: {}
             }, {req, res})
         } else {
             HttpError(res, 500, errors[500])
