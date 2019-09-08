@@ -71,6 +71,11 @@ function POST_Handler({req, res}) {
         hmac.update((formData.password).toString());
         const hash = hmac.digest('hex');
         if (user.password === hash) {
+            response.data = {
+                id: user.userId,
+                login: user.fullName,
+                email: user.uniqueUrlName
+            }
             return Promise.resolve(user)
         } else {
             return Promise.reject(401)
@@ -82,12 +87,12 @@ function POST_Handler({req, res}) {
         if (formData.rememberMe) {
             const expires = 'Fri, 01 Jan 2100 00:00:00 GMT'
             cookie.set('sid', sid, true, {'expires': expires})
-            return col.updateOne({userId: user.userId}, {
-                $set: {sid: sid}
-            })
         } else {
             cookie.set('sid', sid, true);
         }
+        return col.updateOne({userId: user.userId}, {
+            $set: {sid: sid}
+        })
     })
     .then(() => {
         Serializer({
@@ -98,9 +103,9 @@ function POST_Handler({req, res}) {
     .catch((err) => {
         if (typeof(err) === 'Number') {
             Serializer({
-                ...response,
                 resultCode: 1,
-                message: `${errors[err]}`
+                message: `${errors[err]}`,
+                data: {}
             }, {req, res})
         } else {
             HttpError(res, 500, errors[500])

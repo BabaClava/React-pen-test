@@ -18,6 +18,7 @@ const session = (client) => {
     //console.log(req.headers)
     const cookie = new Cookie(client);
     const sid = cookie.get()['sid'];
+    console.log(sid)
     if (sid) {
         const col = db.getClient().db('usersdb').collection('users');
         col

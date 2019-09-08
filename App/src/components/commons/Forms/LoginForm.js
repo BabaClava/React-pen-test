@@ -51,4 +51,4 @@ const LoginForm = (props) => {
     )
 }
 
-export default reduxForm({form:'login'})(LoginForm)
+export default reduxForm({form:'login', initialValues: { rememberMe: false }})(LoginForm)
