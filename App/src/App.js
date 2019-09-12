@@ -1,41 +1,63 @@
-import React,{ Suspense, lazy } from 'react';
+import React,{ Suspense, lazy, Component } from 'react';
 import './App.sass';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from 'reactstrap';
 import Navbar from './components/Navbar/Navbar';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Preloader from './components/commons/Preloader';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import Login from './components/Login/Login'
+import { compose } from 'redux';
+import { connect } from "react-redux";
+import { initialize } from "./redux/app-reducer";
 
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
-const App = () => {
-  return (
-    <Container className="app-wrapper p-0" no-gutters='true'>
-      <Row noGutters>
-        <HeaderContainer />
-      </Row>
-      <Row noGutters>
-        <Col tag='aside' xs="2">
-          <Navbar />
-        </Col>
-        <Col tag="main"  className="content">
-          <Suspense fallback={<Preloader/>}>  
-            <Switch>
-              <Redirect from="/" exact to="/login" />
-              <Route path="/profile/:id?" render={() => <ProfileContainer />} />
-              <Route path="/dialogs" render={() => <DialogsContainer />} />
-              <Route path="/users" render={() => <UsersContainer /> } />
-              <Route path="/login" render={() => <Login />} />
-            </Switch>
-          </Suspense> 
-        </Col>
-      </Row>
-    </Container>
-  );
+class App extends Component {
+  componentDidMount() {
+    this.props.initialize()
+  }
+  
+  render() {
+    if (!this.props.initialized) {
+      return <Preloader />
+    }
+    return (
+      <Container className="app-wrapper p-0" no-gutters='true'>
+        <Row noGutters>
+          <HeaderContainer />
+        </Row>
+        <Row noGutters>
+          <Col tag='aside' xs="2">
+            <Navbar />
+          </Col>
+          <Col tag="main" className="content">
+            <Suspense fallback={<Preloader />}>
+              <Switch>
+                <Redirect from="/" exact to="/login" />
+                <Route path="/profile/:id?" render={() => <ProfileContainer />} />
+                <Route path="/dialogs" render={() => <DialogsContainer />} />
+                <Route path="/users" render={() => <UsersContainer />} />
+                <Route path="/login" render={() => <Login />} />
+              </Switch>
+            </Suspense>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  initialized: state.app.initialized
+})
+const mapDispatchToProps = {
+  initialize
+}
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(App);

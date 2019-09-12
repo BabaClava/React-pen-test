@@ -9,7 +9,7 @@ import {compose} from 'redux';
 class ProfileContainer extends Component {
 
     componentDidMount() {
-        const id = this.props.match.params.id || 76168296
+        const id = this.props.match.params.id || this.props.authorizedId;
         this.props.getProfile(id)
         this.props.getStatus(id)
     }
@@ -23,7 +23,9 @@ class ProfileContainer extends Component {
  
 const mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
-    status: state.profilePage.status
+    status: state.profilePage.status,
+    isAuth: state.auth.isAuth,
+    authorizedId: state.auth.userId
 })
 
 const mapDispatchToProps = {

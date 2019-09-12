@@ -2,6 +2,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import {TextField} from './FormFields/TextField';
 import {lengthValidator as length} from './validators/index'
+import s from './forms.module.sass';
 
 const length10 = length(10);
 const LoginForm = (props) => {
@@ -40,6 +41,7 @@ const LoginForm = (props) => {
                     />
                 </div>
             </div>
+            {props.error && <div className={s.error}>{props.error}</div>}
             <div>
                 <button
                     type='submit'

@@ -67,6 +67,7 @@ function POST_Handler({req, res}) {
         return col.findOne({fullName: formData.login})
     })
     .then(user => {
+        if (!user) return Promise.reject(401);
         const hmac = crypto.createHmac('sha1', config.secret);
         hmac.update((formData.password).toString());
         const hash = hmac.digest('hex');
@@ -101,7 +102,7 @@ function POST_Handler({req, res}) {
         }, {req, res})
     })
     .catch((err) => {
-        if (typeof(err) === 'Number') {
+        if (typeof(err) === 'number') {
             Serializer({
                 ...response,
                 resultCode: 1,
