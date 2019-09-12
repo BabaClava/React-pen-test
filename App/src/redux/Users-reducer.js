@@ -119,7 +119,7 @@ export const setCurrentPage = (page) => ({
 });
 
 //Thunks
-export const getUsers = (pageSize, currentPage) => {
+export const getUsersList = (pageSize, currentPage) => {
     return (dispatch) => {
         dispatch(isFetchingToggler(true));
         UserApi.getUsers(pageSize, currentPage)

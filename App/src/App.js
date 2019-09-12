@@ -12,6 +12,7 @@ import Login from './components/Login/Login'
 import { compose } from 'redux';
 import { connect } from "react-redux";
 import { initialize } from "./redux/app-reducer";
+import { getInitializeStatus } from './redux/app-selectors';
 
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
@@ -51,7 +52,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  initialized: state.app.initialized
+  initialized: getInitializeStatus(state)
 })
 const mapDispatchToProps = {
   initialize

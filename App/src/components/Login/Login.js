@@ -3,6 +3,7 @@ import LoginForm from '../commons/Forms/LoginForm';
 import { connect } from 'react-redux';
 import {logIn} from '../../redux/auth-reducer';
 import {Redirect} from 'react-router-dom';
+import { getAuthStatus } from '../../redux/auth-selectors';
 
 const Login = props => {
     const onSubmit = (formData) => {
@@ -20,7 +21,7 @@ const Login = props => {
 }
  
 const mapStateToProps = state => ({
-    isAuth: state.auth.isAuth
+    isAuth: getAuthStatus(state)
 })
 const mapDispatchToProps = {
     logIn

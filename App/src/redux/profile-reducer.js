@@ -59,13 +59,13 @@ export const setUserStatus = (status) => ({
 });
 
 //Thunks
-export const getProfile = id => {
+export const getProfileData = id => {
   return dispatch => {
     ProfileApi.getProfile(id)
       .then(data => dispatch(setUserProfile(data)))
   }
 }
-export const getStatus = id => {
+export const getStatusData = id => {
   return dispatch => {
     ProfileApi.getStatus(id)
       .then(data => dispatch(setUserStatus(data)))

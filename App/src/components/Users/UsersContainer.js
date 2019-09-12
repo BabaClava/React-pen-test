@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { test, 
          follow,
          unfollow,
-         getUsers,
+         getUsersList,
          getPage } from '../../redux/Users-reducer';
 import Users from './Users';
 import loader from '../../assets/img/loader.svg';
 import Paginator from '../commons/Paginator';
 import {compose} from 'redux';
 import { withAuthRedirect } from '../../hoc/withRedirect';
+import { getUsers, getCurrentPage, getPageSize, getTotalCount, getFollowingStatus } from '../../redux/users-selectors';
 
 class UsersAPIComponent extends Component {
   componentDidMount() {
-    this.props.getUsers(this.props.pageSize, this.props.currentPage)
+    this.props.getUsersList(this.props.pageSize, this.props.currentPage)
   }
 
   onPageChange = (page) => {
@@ -47,11 +48,11 @@ class UsersAPIComponent extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        users: state.usersPage.users,
-        currentPage: state.usersPage.currentPage,
-        pageSize: state.usersPage.pageSize,
-        totalCount: state.usersPage.totalCount,
-        followingInProgress: state.usersPage.followingInProgress
+        users: getUsers(state),
+        currentPage: getCurrentPage(state),
+        pageSize: getPageSize(state),
+        totalCount: getTotalCount(state),
+        followingInProgress: getFollowingStatus(state)
     }
 }
 
@@ -59,7 +60,7 @@ const mapDispatchToProps = {
     onTestClick: test,
     follow,
     unfollow,
-    getUsers,
+    getUsersList,
     getPage
 }
 

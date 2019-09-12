@@ -3,11 +3,12 @@ import { addMessage } from '../../redux/dialogs-reducer';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import {withAuthRedirect} from '../../hoc/withRedirect';
+import { getDialogs, getMessages } from '../../redux/dialogs-selectors';
 
 let mapStateToProps = (state) => {
     return {
-        dialogsData: state.dialogsPage.dialogsData,
-        messagesData: state.dialogsPage.messagesData,
+        dialogsData: getDialogs(state),
+        messagesData: getMessages(state)
     }
 }
 
