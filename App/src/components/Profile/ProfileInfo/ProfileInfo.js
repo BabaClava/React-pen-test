@@ -2,7 +2,8 @@ import React from "react";
 import s from './ProfileInfo.module.sass';
 import Preloader from '../../commons/Preloader';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
-import StatusBar from './StatusBar/StatusBar'
+//import StatusBar from './StatusBar/StatusBar'
+import StatusBarHook from './StatusBar/StatusBarHook'
 
 const ProfileInfo = (props) => {
   if(!props.profile) return <Preloader />
@@ -16,7 +17,7 @@ const ProfileInfo = (props) => {
         ava + description
       </div>
       <div>
-        <StatusBar status={props.status} updateStatus={props.updateStatus}/>
+        <StatusBarHook status={props.status} updateStatus={props.updateStatus}/>
       </div>
     </div>
   );
