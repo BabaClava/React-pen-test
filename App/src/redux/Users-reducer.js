@@ -1,13 +1,12 @@
 import { UserApi } from "../api";
 
-const TEST = 'TEST';
-const FOLLOW = 'FOLLOW';
-const UNFOLLOW = 'UNFOLLOW';
-const SET_USERS = 'SET_USERS';
-const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT';
-const IS_FETCHING_TOGGLER = 'IS_FETCHING_TOGGLER';
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const FOLLOWING_PROGRESS_TOGGLER = 'FOLLOWING_PROGRESS_TOGGLER';
+const FOLLOW = 'users/FOLLOW';
+const UNFOLLOW = 'users/UNFOLLOW';
+const SET_USERS = 'users/SET_USERS';
+const SET_TOTAL_COUNT = 'users/SET_TOTAL_COUNT';
+const IS_FETCHING_TOGGLER = 'users/IS_FETCHING_TOGGLER';
+const SET_CURRENT_PAGE = 'users/SET_CURRENT_PAGE';
+const FOLLOWING_PROGRESS_TOGGLER = 'users/FOLLOWING_PROGRESS_TOGGLER';
 
 let initialState = {
     users: [],
@@ -20,11 +19,6 @@ let initialState = {
 
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
-        case TEST: 
-            console.log('test');
-            return {
-                ...state
-            };
         case FOLLOW:
             return {
                 ...state,
@@ -78,10 +72,6 @@ const usersReducer = (state = initialState, action) => {
 }
 
 //Action Creators
-export const test = () => ({
-    type: TEST
-});
-
 export const followSuccess = (id) => ({
     type: FOLLOW,
     id
@@ -124,9 +114,7 @@ export const getUsersList = (pageSize, currentPage) => {
         dispatch(isFetchingToggler(true));
         UserApi.getUsers(pageSize, currentPage)
             .then(data => {
-                dispatch(setUsers(data.items));
-                dispatch(setTotalCount(data.totalCount));
-                dispatch(isFetchingToggler(false));
+                setData(data, dispatch)
         });
     }
 };
@@ -137,33 +125,36 @@ export const getPage = (pageSize, page) => {
         dispatch(isFetchingToggler(true));
         UserApi.getUsers(pageSize, page)
         .then(data => {
-            dispatch(setUsers(data.items));
-            dispatch(setTotalCount(data.totalCount));
-            dispatch(isFetchingToggler(false));
+            setData(data, dispatch)
         });
     }
 };
 
+function setData(data, dispatch) {
+    [setUsers(data.items),
+    setTotalCount(data.totalCount),
+    isFetchingToggler(false)].forEach(fn => dispatch(fn))
+}
+
 export const follow = (id) => {
     return (dispatch) => {
-        dispatch(followingInProgressToggler(true, id));
-        UserApi.follow(id)
-        .then(data => {
-            if (data.resultCode === 0) dispatch(followSuccess(id));
-            dispatch(followingInProgressToggler(false, id));
-        });
+        followUnfollowFlow(UserApi.follow.bind(UserApi), id, followSuccess, dispatch)
     };
 };
 
 export const unfollow = (id) => {
     return (dispatch) => {
-        dispatch(followingInProgressToggler(true, id));
-        UserApi.unfollow(id)
-        .then(data => {
-            if (data.resultCode === 0) dispatch(unfollowSuccess(id));
-            dispatch(followingInProgressToggler(false, id));
-        })
+        followUnfollowFlow(UserApi.unfollow.bind(UserApi), id, unfollowSuccess, dispatch)
       };
 }
+
+function followUnfollowFlow(method, id, actionCreator, dispatch,) {
+    dispatch(followingInProgressToggler(true, id));
+    method(id)
+        .then(data => {
+            if (data.resultCode === 0) dispatch(actionCreator(id));
+            dispatch(followingInProgressToggler(false, id));
+        })
+};
 
 export default usersReducer;

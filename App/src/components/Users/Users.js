@@ -21,7 +21,7 @@ const Users = props => {
       <Row>
         <Col className={s.buttonContainer}>
           <div>
-            <button onClick={() => props.onTestClick()}>Show more</button>
+            <button onClick={() => console.log('click')}>Show more</button>
           </div>
         </Col>
       </Row>

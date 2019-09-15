@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { test, 
-         follow,
+import { follow,
          unfollow,
          getUsersList,
          getPage } from '../../redux/Users-reducer';
@@ -14,32 +13,43 @@ import { getUsers, getCurrentPage, getPageSize, getTotalCount, getFollowingStatu
 
 class UsersAPIComponent extends Component {
   componentDidMount() {
-    this.props.getUsersList(this.props.pageSize, this.props.currentPage)
+    const {getUsersList, pageSize, currentPage} = this.props
+    getUsersList(pageSize, currentPage)
   }
-
+  // getPage = this.props.getPage;
+  // pageSize = this.props.pageSize
   onPageChange = (page) => {
-    this.props.getPage(this.props.pageSize ,page)
+    const {getPage, pageSize} = this.props;
+    getPage(pageSize ,page)
   }
 
   get pagesCount() {
-    return Math.ceil(this.props.totalCount / this.props.pageSize)
+    const {totalCount, pageSize} = this.props;
+    return Math.ceil(totalCount / pageSize)
   }
 
   render() {
+    const {
+      currentPage, 
+      users, 
+      follow,
+      unfollow, 
+      followingInProgress, 
+      isFetching
+    } = this.props
     return (
         <>
             <Paginator
               pagesCount={this.pagesCount}
-              currentPage={this.props.currentPage}
+              currentPage={currentPage}
               onPageChange={this.onPageChange}
             />
-            {this.props.isFetching && <div><img src={loader} alt='loader'/></div>}
+            {isFetching && <div><img src={loader} alt='loader'/></div>}
             <Users
-              users={this.props.users}
-              onTestClick={this.props.onTestClick}
-              follow={this.props.follow}
-              unfollow={this.props.unfollow}
-              followingInProgress={this.props.followingInProgress}
+              users={users}
+              follow={follow}
+              unfollow={unfollow}
+              followingInProgress={followingInProgress}
             />
         </>
     );
@@ -57,7 +67,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    onTestClick: test,
     follow,
     unfollow,
     getUsersList,
