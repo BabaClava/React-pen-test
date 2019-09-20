@@ -4,16 +4,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from 'reactstrap';
 import Navbar from './components/Navbar/Navbar';
 import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
-import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Preloader from './components/commons/Preloader';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
-import Login from './components/Login/Login'
 import { compose } from 'redux';
 import { connect } from "react-redux";
 import { initialize } from "./redux/app-reducer";
 import { getInitializeStatus } from './redux/app-selectors';
 
+const Login = lazy(() => ('./components/Login/Login'));
+const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'));
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
 class App extends Component {

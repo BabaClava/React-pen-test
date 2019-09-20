@@ -6,7 +6,8 @@ import { follow,
          getPage } from '../../redux/Users-reducer';
 import Users from './Users';
 import loader from '../../assets/img/loader.svg';
-import Paginator from '../commons/Paginator';
+// import Paginator from '../commons/Paginator';
+import Paginator from '../commons/PaginationWithReactstrap'
 import {compose} from 'redux';
 import { withAuthRedirect } from '../../hoc/withRedirect';
 import { getUsers, getCurrentPage, getPageSize, getTotalCount, getFollowingStatus } from '../../redux/users-selectors';
@@ -43,6 +44,7 @@ class UsersAPIComponent extends Component {
               pagesCount={this.pagesCount}
               currentPage={currentPage}
               onPageChange={this.onPageChange}
+              portionSize={5}
             />
             {isFetching && <div><img src={loader} alt='loader'/></div>}
             <Users
