@@ -1,7 +1,7 @@
 'use strict'
 
 const MongoClient = require('mongodb').MongoClient
-    , config = require('./config');
+    , config = require('../config');
 
 const MONGO_URL = config.db.url;
 
