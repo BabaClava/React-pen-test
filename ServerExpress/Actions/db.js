@@ -8,7 +8,7 @@ const MONGO_URL = config.db.url;
 let _client;
 module.exports = {
     connect: () => {
-        const mongoClient = new MongoClient(MONGO_URL, {useNewUrlParser: true});
+        const mongoClient = new MongoClient(MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true});
         return new Promise ((resolve, reject) => {
             mongoClient.connect((err, client) => {
                 if (err) reject(err);

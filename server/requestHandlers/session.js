@@ -34,11 +34,6 @@ const session = (client) => {
                     return Promise.reject('user not found');
                 }
             })
-            // .then(() => {
-            //     return new Promise((res, rej) => {
-            //         setTimeout(res, 2000)
-            //     })
-            // })
             .catch(err => {
                 console.error(err)
                 result.resultCode = 1

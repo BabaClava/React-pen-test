@@ -1,19 +1,28 @@
-const express = require('express');
+const express = require('express')
+    , bodyParser = require('body-parser')
+    , cookieParser = require('cookie-parser');
+
+const config = require('./config')
+    , db = require('./Actions/db');
+
+const PORT = process.argv[2] || config.port || 3000;
 const App = express();
-const config = require('./config');
 
-const PORT = config.port;
+App.use(bodyParser.json());
+App.use(cookieParser());
 
-App.use(require('./MainRouter'));
+App.use(require('./Router'));
 
-App
-    .listen(PORT, () => console.log('server start on port `${PORT}`'))
-    .on("error", err => {
-        if (err.code === "EADDRINUSE") {
-            console.error(`No access to port: ${PORT}\r\n`);
-        }
-    })
-    // .on("clientError", (err, socket) => {
-    //     socket.end("HTTP/1.1 400 Bad Request\r\n");
-    // })
+(function startServer(){ 
+    db.connect()
+        .then(() => App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`)))
+        .catch((err) => {
+            console.error('DB not connected');
+            setTimeout(startServer, 5000);
+        });
+})()
 
+process.on("SIGINT", () => {
+    db.getClient() && db.getClient().close();
+    process.exit();
+});
