@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
     port: 3002,
     static: '/public',
     db: {
@@ -13,5 +13,3 @@ const config = {
         // expires: 'Fri, 01 Jan 2100 00:00:00 GMT'
     }
 }
-
-module.exports = config;
