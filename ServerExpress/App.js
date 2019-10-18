@@ -4,12 +4,12 @@ const express = require('express')
     // , cors = require('cors');
 
 const config = require('./config')
-    , db = require('./Actions/db')
+    , db = require('./Models/db')
     , program = require('commander');
 
 program
     .option('-p, --port <type>')
-    .option('-t, --test')
+    // .option('-t, --test')
     .parse(process.argv);
 
 const PORT = parseInt(program.port) || config.port || 3000;
@@ -26,24 +26,25 @@ App.use(require('./Router'));
 
 (function start() {
     program.test
-        ? startWithoutDB()
+        ? testStart()
         : startServer()
 })();
 
-function startWithoutDB() {
-    App.listen(PORT, () => console.info(`Server start on port:${PORT} \u001b[31m "TEST mode"\x1b[0m\r\n`))
+function testStart() {
+    console.warn('Coming soon');
 }
 
 function startServer(){ 
-    db.connect()
-        .then(() => App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`)))
-        .catch((err) => {
-            console.error('\u001b[33m DB not connected\x1b[0m');
+    db.connect((err) => {
+        if(err) {
             setTimeout(startServer, 5000);
-        });
+            return console.error('\u001b[33m DB not connected\x1b[0m');
+        }
+        App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`))
+    })
 }
 
 process.on("SIGINT", () => {
-    db.getClient() && db.getClient().close();
+    db.get() && db.get().close();
     process.exit();
 });
