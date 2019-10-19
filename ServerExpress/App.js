@@ -35,13 +35,14 @@ function testStart() {
 }
 
 function startServer(){ 
-    db.connect((err) => {
-        if(err) {
+    db.connect()
+        .then(() => {
+            App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`));        
+        })
+        .catch(err => {
+            console.error('\u001b[33m DB not connected\x1b[0m');
             setTimeout(startServer, 5000);
-            return console.error('\u001b[33m DB not connected\x1b[0m');
-        }
-        App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`))
-    })
+        })
 }
 
 process.on("SIGINT", () => {
