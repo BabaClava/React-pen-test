@@ -8,7 +8,7 @@ module.exports = ({login, password = ''}) => {
         .findOne({fullName: login})
         .then(user => {
             if (!user) return Promise.reject('user not found');
-            const hmac = crypto.createHmac('sha1', config.secret);
+            const hmac = crypto.createHmac('sha1', config.pwdSecret);
             hmac.update((password).toString());
             const hash = hmac.digest('hex');
             if (user.password === hash) {
