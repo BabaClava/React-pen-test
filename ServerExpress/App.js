@@ -6,8 +6,9 @@ const express = require('express')
     , MongoStore = require('connect-mongo')(session);
 
 const config = require('./config')
-    , db = require('./Models/db')
-    , program = require('commander');
+    , db = require('./db')
+    , program = require('commander')
+    , dbInitialize = require('./middleware/dbInitialize');
 
 program
     .option('-p, --port <type>')
@@ -17,6 +18,7 @@ program
 const PORT = parseInt(program.port) || config.port || 3000;
 
 const App = express();
+// App.use(dbInitialize);
 // App.use(cors());
 // App.options('*', cors());
 App.use(bodyParser.json());
