@@ -48,7 +48,7 @@ function testStart() {
 }
 
 function startServer(){   
-    db.connect()
+    db.get()
         .then(() => {
             App.listen(PORT, () => console.info(`Server start on port:${PORT}\r\n`));        
         })
@@ -59,6 +59,6 @@ function startServer(){
 }
 
 process.on("SIGINT", () => {
-    db.get() && db.get().close();
+    db.close();
     process.exit();
 });
