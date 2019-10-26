@@ -2,7 +2,7 @@ module.exports = {
     port: 3002,
     static: '/public',
     db: {
-        url: "mongodb://localhost:27017/",
+        url: "mongodb://localhost:27017/usersdb",
         reqDefault: 10,
         reqMax: 100
     },
@@ -12,14 +12,7 @@ module.exports = {
         cookie: {
             path: '/',
             domain: 'localhost',
-            expires: 'Fri, 01 Jan 2100 00:00:00 GMT'
-        },
-        storage: {
-            storage: 'mongodb',
-            host: 'localhost', // optional
-            port: 27017, // optional
-            db: 'usersdb', // optional
-            collection: 'sessions', // optional
+            expires: new Date('Fri, 01 Jan 2100 00:00:00 GMT')
         }
     }
 }

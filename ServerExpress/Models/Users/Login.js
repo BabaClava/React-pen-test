@@ -1,20 +1,20 @@
+
 const crypto = require('crypto');
 
-const client = require('../../db')
-    , config = require('../../config');
+const config = require('../../config')
+    , HttpError = require('../../Errors/HttpError');
 
-module.exports = ({login, password = ''}) => {
-    return client.get().db('usersdb').collection('users')
-        .findOne({fullName: login})
+module.exports = ({body:{login, password = ''}, dbClient}) => {
+    return dbClient.db('usersdb').collection('users').findOne({fullName: login})
         .then(user => {
-            if (!user) return Promise.reject('user not found');
+            if (!user) throw new HttpError('user not found');
+
             const hmac = crypto.createHmac('sha1', config.pwdSecret);
             hmac.update((password).toString());
             const hash = hmac.digest('hex');
-            if (user.password === hash) {
-                return Promise.resolve(user.userId)
-            } else {
-                return Promise.reject('Incorrect Password')
-            }
+
+            if (user.password !== hash) throw new HttpError('Incorrect Password')
+
+            return user;
         })
 }
