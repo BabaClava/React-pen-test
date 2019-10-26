@@ -18,6 +18,7 @@ function postHandler (req, res) {
     users.login(req)
         .then(user => {
             req.session.user = user._id;
+            if (req.body.rememberMe) req.session.cookie.expires = new Date('Fri, 01 Jan 2100 00:00:00 GMT');
             res.json({
                 ...result,
                 resultCode: 0,

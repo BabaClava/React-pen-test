@@ -32,8 +32,11 @@ App.use(session({     // TODO: rework this crap & try cookie sessions
     autoReconnect: true,
     saveUninitialized: false,
     resave: false,
+    rolling: true,
     cookie: config.session.cookie,
-    store: new MongoStore({clientPromise: db.get(), touchAfter: 1 * 3600})
+    store: new MongoStore({clientPromise: db.get(), 
+                           touchAfter: 1 * 3600,
+                           ttl: 24*60*60})
 }));
 
 App.use(express.static('Public'));

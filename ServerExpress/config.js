@@ -12,7 +12,6 @@ module.exports = {
         cookie: {
             path: '/',
             domain: 'localhost',
-            expires: new Date('Fri, 01 Jan 2100 00:00:00 GMT')
         }
     }
 }
