@@ -1,6 +1,8 @@
 const Router = require('express').Router();
 
-Router.use('/status', require('./Status'));
-Router.use('/', require('./Profile'));
+const loadUser = require('../../middleware/loadUser');
+
+Router.use('/status', loadUser, require('./Status'));
+Router.use('/', loadUser, require('./Profile'));
 
 module.exports = Router;

@@ -1,1 +1,1 @@
-exports.login = require('./Login');
+exports.getAllPaged = require('./GetAllPaged');

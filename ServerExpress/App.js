@@ -9,8 +9,11 @@ const express = require('express')
 const config = require('./config')
     , db = require('./db')
     , program = require('commander')
-    , dbInitialize = require('./middleware/dbInitialize');
+    , dbInitialize = require('./middleware/dbInitialize')
+    , HttpError = require('./Errors/HttpError');
 
+// BASE SETUP
+// ==============================================
 program
     .option('-p, --port <type>')
     // .option('-t, --test')
@@ -26,8 +29,9 @@ App.use(bodyParser.json());
 App.use(bodyParser.raw());
 App.use(cookieParser());
 
- 
-App.use(session({     // TODO: rework this crap & try cookie sessions
+// SESSIONS
+// ==============================================
+App.use(session({
     secret: config.session.secret,
     autoReconnect: true,
     saveUninitialized: false,
@@ -39,16 +43,33 @@ App.use(session({     // TODO: rework this crap & try cookie sessions
                            ttl: 24*60*60})
 }));
 
+
+// ROUTES
+// ==============================================
 App.use(express.static('Public'));
 App.use(require('./Router'));
 
+// ERRORS HANDLING
+// ==============================================
+
 // eslint-disable-next-line no-unused-vars
 App.use((err, req, res, next) => {
-    res.status(500);
-    res.end()
-    console.log(err);
+    let errorMsg;
+    if (err instanceof HttpError) { 
+        errorMsg = err.message;
+    } else {
+        errorMsg = 'server error';
+        console.error(err)
+    }
+    res.json({
+        resultCode: 1,
+        messages: [errorMsg],
+        data: {}
+    })
 });
 
+// START THE SERVER
+// ==============================================
 (function start() {
     program.test
         ? testStart()
@@ -70,6 +91,8 @@ function startServer() {
         })
 }
 
+// STOP THE SERVER
+// ==============================================
 process.on("SIGINT", () => {
     db.close();
     process.exit();
