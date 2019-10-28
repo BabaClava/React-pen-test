@@ -1,15 +1,46 @@
 const express = require('express');
-const app = express();
 
-app.route('/:id')
-    .get((req, res) => {
-        res.end(`auth/users:get+${req.params.id}`)
-    })
-    .post((req, res) => {
-        res.end(`auth/users:post+${req.params.id}`)
-    })
-    .delete((req, res) => {
-        res.end(`auth/users:delete+${req.params.id}`)
-    })
+const LoadUser = require('../../middleware/LoadUser')
+    , IdValidator = require('../../Validators/IdValidator')
+    , HttpErrors = require('../../Errors/HttpError')
+    , Follow = require('../../Models/Follow');
+
+const result = {
+    resultCode: 0,
+    messages: [],
+    data: {}
+}
+
+const app = express();
+app.route('/:id?')
+    .all(LoadUser)
+    .all(IdValidator)
+    .get(getHandler)
+    .post(postHandler)
+    .delete(deleteHandler)
     
+// eslint-disable-next-line no-unused-vars
+function getHandler(req, res, next) {
+    if (req.user.followed.includes(req.params.id)) res.json(true);
+    else res.json(false);
+}
+
+function postHandler(req, res, next) {
+    if (req.user.followed.includes(req.params.id)) return next(new HttpErrors('user already followed'));
+    Follow.followUser(req)
+        .then(() => res.json({
+            ...result
+        }))
+        .catch(next)
+}
+
+function deleteHandler(req, res, next) {
+    if (!req.user.followed.includes(req.params.id)) return next(new HttpErrors('user is not followed'));
+    Follow.unfollowUser(req)
+        .then(() => res.json({
+            ...result
+        }))
+        .catch(next)
+}
+
 module.exports = app;

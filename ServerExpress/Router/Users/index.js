@@ -1,13 +1,11 @@
 const express = require('express');
 
-const loadUser = require('../../middleware/loadUser')
-    , HttpError = require('../../Errors/HttpError')
+const LoadUser = require('../../middleware/LoadUser')
     , users = require('../../Models/Users');
 
 const app = express();
 app.route('/')
-    .get(loadUser, (req, res, next) => {
-        if (!req.session.user) return next(new HttpError('unauthorized user'));
+    .get(LoadUser, (req, res, next) => {
         users.getAllPaged(req)
             .then(result => {
                 res.json(result)

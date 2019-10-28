@@ -2,7 +2,8 @@ const express = require('express');
 
 const HttpError = require('../../Errors/HttpError')
     , profile = require('../../Models/Profile')
-    , IdValidator = require('../../Validators/IdValidator');
+    , IdValidator = require('../../Validators/IdValidator')
+    , LoadUser = require('../../middleware/LoadUser');
 
 const response = {
     'resultCode': 0,
@@ -11,11 +12,11 @@ const response = {
 }
 
 const app = express();
+app.use(LoadUser);
 app.put('/', putHandler);
 app.get('/:id?', IdValidator, getHandler);
 
 function putHandler(req, res, next) {
-    if (!req.session.user) return next(new HttpError('unauthorized user'));
     req.status = req.body.status.toString();
     if (req.status.length > 300) return next(new HttpError('max length 300'));
 

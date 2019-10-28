@@ -9,7 +9,7 @@ const express = require('express')
 const config = require('./config')
     , db = require('./db')
     , program = require('commander')
-    , dbInitialize = require('./middleware/dbInitialize')
+    , DbInitialize = require('./middleware/DbInitialize')
     , HttpError = require('./Errors/HttpError');
 
 // BASE SETUP
@@ -22,7 +22,7 @@ program
 const PORT = parseInt(program.port) || config.port || 3000;
 
 const App = express();
-App.use(dbInitialize);
+App.use(DbInitialize);
 // App.use(cors());
 // App.options('*', cors());
 App.use(bodyParser.json());

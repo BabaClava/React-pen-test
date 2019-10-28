@@ -1,6 +1,6 @@
 const express = require('express');
 
-const HttpError = require('../../Errors/HttpError');
+const LoadUser = require('../../middleware/LoadUser');
 
 const result = {
     resultCode: 0,
@@ -9,18 +9,16 @@ const result = {
 }
     
 const app = express();
-app.get('/', (req, res, next) => {
-    if (!req.user) next(new HttpError('unauthorized user'));
-    else {
-        res.json({
-            ...result,
-            data: {
-                id: req.user.userId,
-                login: req.user.fullName,
-                email: req.user.uniqueUrlName
-            }
-        })
-    }
+// eslint-disable-next-line no-unused-vars
+app.get('/', LoadUser, (req, res, next) => {
+    res.json({
+        ...result,
+        data: {
+            id: req.user.userId,
+            login: req.user.fullName,
+            email: req.user.uniqueUrlName
+        }
+    })
 })
     
 module.exports = app;

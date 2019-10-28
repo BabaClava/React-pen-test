@@ -1,8 +1,7 @@
 const express = require('express');
 
 const auth = require('../../Models/Auth')
-    , HttpError = require('../../Errors/HttpError');
-
+    , LoadUser = require('../../middleware/LoadUser');
 const result = {
     resultCode: 0,
     messages: [],
@@ -11,7 +10,7 @@ const result = {
 
 const app = express();
 app.route('/')
-    .delete(deleteHandler)
+    .delete(LoadUser, deleteHandler)
     .post(postHandler)
 
 function postHandler (req, res, next) {
@@ -29,17 +28,14 @@ function postHandler (req, res, next) {
         .catch(next);
 }
 function deleteHandler(req, res, next) {
-    if (!req.session.user) next(new HttpError('unauthorized user'));
-    else {
-        req.session.destroy((err) => {
-            if (err) next(err);
-            else {
-                res.json({
-                    ...result
-                })
-            }
-        })
-    }
+    req.session.destroy((err) => {
+        if (err) next(err);
+        else {
+            res.json({
+                ...result
+            })
+        }
+    })
 }
 
 module.exports = app;
