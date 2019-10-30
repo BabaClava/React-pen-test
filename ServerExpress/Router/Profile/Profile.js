@@ -1,6 +1,6 @@
 const express = require('express');
 
-const profile = require('../../Models/Profile')
+const User = require('../../Models/User')
     , IdValidator = require('../../Validators/IdValidator')
     , LoadUser = require('../../middleware/LoadUser');
 
@@ -9,7 +9,7 @@ app.use(LoadUser);
 app.get('/:id?', IdValidator, getHandler)
 
 function getHandler(req, res, next) {
-    profile.getProfile(req)
+    User.getProfile(req)
         .then(user => {
             res.json(user);
         })

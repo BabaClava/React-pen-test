@@ -1,7 +1,8 @@
 const express = require('express');
 
-const auth = require('../../Models/Auth')
+const User = require('../../Models/User')
     , LoadUser = require('../../middleware/LoadUser');
+
 const result = {
     resultCode: 0,
     messages: [],
@@ -14,7 +15,7 @@ app.route('/')
     .post(postHandler)
 
 function postHandler (req, res, next) {
-    auth.login(req)
+    User.login(req)
         .then(user => {
             req.session.user = user._id;
             if (req.body.rememberMe) req.session.cookie.expires = new Date('Fri, 01 Jan 2100 00:00:00 GMT');

@@ -1,1 +1,0 @@
-exports.getAllPaged = require('./GetAllPaged');

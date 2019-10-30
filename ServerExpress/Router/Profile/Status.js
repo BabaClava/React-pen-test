@@ -1,7 +1,7 @@
 const express = require('express');
 
 const HttpError = require('../../Errors/HttpError')
-    , profile = require('../../Models/Profile')
+    , User = require('../../Models/User')
     , IdValidator = require('../../Validators/IdValidator')
     , LoadUser = require('../../middleware/LoadUser');
 
@@ -20,7 +20,7 @@ function putHandler(req, res, next) {
     req.status = req.body.status.toString();
     if (req.status.length > 300) return next(new HttpError('max length 300'));
 
-    profile.updateStatus(req)
+    User.updateStatus(req)
         .then(() => {
             res.json({
                 ...response
@@ -30,7 +30,7 @@ function putHandler(req, res, next) {
 }
 
 function getHandler(req, res, next) {
-    profile.getStatus(req)
+    User.getStatus(req)
         .then((status) => {
             res.json(status)
         })

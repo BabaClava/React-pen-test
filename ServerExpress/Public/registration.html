@@ -24,54 +24,29 @@
         const pwd2 = form.password2;
         let errMsg;
         
-        let salt;
-        const URL = 'http://localhost:3002/api/auth/register'
-        document.onload = getSalt();
-        function getSalt () {
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        salt = xhr.getResponseHeader('Salt');
-                        return salt;
-                    } else {
-                        console.error(`Status code: ${xhr.status}`);
-                    }
+        const URL = 'http://localhost:3002/api/auth/registration'
+        form.onsubmit = (event) => {
+            event.preventDefault();
+            if (pwd1.value !== pwd2.value) {
+                validErr('Passwords do not match')
+                return;
+            } else {
+                pwd1.classList.remove('error');
+                pwd2.classList.remove('error');
+                errMsg && errMsg.remove();
+                const data = {
+                    login: login.value,
+                    password: pwd1.value
                 }
+                fetch(URL, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
             }
-            xhr.open('GET', URL, true);
-            xhr.withCredentials = true;
-            xhr.send();
-        }
-            
-            form.onsubmit = (event) => {
-                event.preventDefault();
-                if (pwd1.value !== pwd2.value) {
-                    validErr('Passwords do not match')
-                    return;
-                } else {
-                    pwd1.classList.remove('error');
-                    pwd2.classList.remove('error');
-                    errMsg && errMsg.remove();
-                    const xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = () => {
-                        console.log(xhr.responseText)
-                        if (xhr.readyState !== 4) return;
-                        switch (Number(xhr.responseText)) {
-                            case 1:
-                                validErr('Login already exist')
-                                break;
-                            case 2:
-                                validErr('Unaccepted error')
-                                break;
-                        }
-                    }
-                    xhr.open('POST', URL, true);
-                    xhr.withCredentials = true;
-                    xhr.setRequestHeader('Content-type', 'text/plain');
-                    let result = `${login.value}:${pwd1.value+salt}`;
-                    xhr.send(result);
-                }
         }
 
         function validErr(msg) {

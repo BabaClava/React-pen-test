@@ -3,7 +3,7 @@ const express = require('express');
 const LoadUser = require('../../middleware/LoadUser')
     , IdValidator = require('../../Validators/IdValidator')
     , HttpErrors = require('../../Errors/HttpError')
-    , Follow = require('../../Models/Follow');
+    , User = require('../../Models/User');
 
 const result = {
     resultCode: 0,
@@ -27,7 +27,7 @@ function getHandler(req, res, next) {
 
 function postHandler(req, res, next) {
     if (req.user.followed.includes(req.params.id)) return next(new HttpErrors('user already followed'));
-    Follow.followUser(req)
+    User.follow(req)
         .then(() => res.json({
             ...result
         }))
@@ -36,7 +36,7 @@ function postHandler(req, res, next) {
 
 function deleteHandler(req, res, next) {
     if (!req.user.followed.includes(req.params.id)) return next(new HttpErrors('user is not followed'));
-    Follow.unfollowUser(req)
+    User.unfollow(req)
         .then(() => res.json({
             ...result
         }))
