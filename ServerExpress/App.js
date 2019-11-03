@@ -46,7 +46,8 @@ App.use(session({
 
 // ROUTES
 // ==============================================
-App.use(express.static('Public'));
+// eslint-disable-next-line no-undef
+App.use(express.static(__dirname  + '/Public'));
 App.use(require('./Router'));
 
 // ERRORS HANDLING
