@@ -2,7 +2,7 @@ const express = require('express')
     , process = require('process')
     , bodyParser = require('body-parser')
     , cookieParser = require('cookie-parser')
-    // , cors = require('cors')
+    , cors = require('cors')
     , session = require('express-session')
     , MongoStore = require('connect-mongo')(session);
 
@@ -23,8 +23,11 @@ const PORT = parseInt(program.port) || config.port || 3000;
 
 const App = express();
 App.use(DbInitialize);
-// App.use(cors());
-// App.options('*', cors());
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
+App.use(cors(corsOptions));
 App.use(bodyParser.json());
 App.use(bodyParser.raw());
 App.use(cookieParser());

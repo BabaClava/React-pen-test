@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { initialize } from "./redux/app-reducer";
 import { getInitializeStatus } from './redux/app-selectors';
 
-const Login = lazy(() => ('./components/Login/Login'));
+const Login = lazy(() => import('./components/Login/Login'));
 const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'));
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
@@ -22,9 +22,9 @@ class App extends Component {
   }
   
   render() {
-    if (!this.props.initialized) {
-      return <Preloader />
-    }
+    // if (!this.props.initialized) {
+    //   return <Preloader />
+    // }
     return (
       <Container className="app-wrapper p-0" no-gutters='true'>
         <Row noGutters>
