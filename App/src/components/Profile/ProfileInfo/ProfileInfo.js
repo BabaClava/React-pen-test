@@ -3,21 +3,23 @@ import s from './ProfileInfo.module.sass';
 import Preloader from '../../commons/Preloader';
 import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 //import StatusBar from './StatusBar/StatusBar'
-import StatusBarHook from './StatusBar/StatusBarHook'
+import StatusBarHook from './StatusBar/StatusBarHook';
+import ProfileDescription from './ProfileDescription';
 
-const ProfileInfo = (props) => {
-  if(!props.profile) return <Preloader />
+const ProfileInfo = ({profile, status, updateStatus}) => {
+
+  if(!profile) return <Preloader />
 
   return (
     <div>
       <div className={s.profileHeader}>
       </div>
       <div className={s.avatarContainer}>
-        <img src={props.profile.photos.large ? `http://localhost:3002/${props.profile.photos.large}` : avatarPlaceholder}  alt='profileInfo'/>
-        ava + description
+        <img src={profile.photos.large ? `http://localhost:3002/${profile.photos.large}` : avatarPlaceholder}  alt='profileInfo'/>
+        <StatusBarHook status={status} updateStatus={updateStatus}/>
       </div>
       <div>
-        <StatusBarHook status={props.status} updateStatus={props.updateStatus}/>
+        <ProfileDescription profile={profile}/>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import {TextField} from './FormFields/TextField';
 import {lengthValidator as length} from './validators/index'
 import s from './forms.module.sass';
+import StyledCheckbox from './FormFields/StyledCheckbox';
 
 const length10 = length(10);
 const LoginForm = (props) => {
@@ -36,8 +37,8 @@ const LoginForm = (props) => {
                 <div>
                     <Field
                         name='rememberMe'
-                        component='input'
-                        type='checkbox'
+                        component={StyledCheckbox}
+                        // type='checkbox'
                     />
                 </div>
             </div>

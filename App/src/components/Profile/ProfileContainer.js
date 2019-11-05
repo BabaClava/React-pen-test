@@ -10,12 +10,27 @@ import { getProfile, getStatus } from '../../redux/profile-selectors';
 
 class ProfileContainer extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            defaultId: props.authorizedId
+        }
+    }
+
     componentDidMount() {
-        const id = this.props.match.params.id || this.props.authorizedId;
+        let id = this.props.match.params.id || this.props.authorizedId;
         this.props.getProfileData(id)
         this.props.getStatusData(id)
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(this.props.match.params.id !== prevProps.match.params.id) {
+            this.props.getProfileData(this.state.defaultId)
+            this.props.getStatusData(this.state.defaultId)
+        }
+    }
+
+    
     render() { 
         return ( 
             <Profile {...this.props} profile={this.props.profile}/>

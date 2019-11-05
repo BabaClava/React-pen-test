@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "client": "cd App && npm start",
-    "server": "cd server && npm start",
+    "server": "cd ServerExpress && npm start",
     "start": "npm-run-all --parallel server client"
   },
   "repository": {

@@ -22,9 +22,9 @@ class App extends Component {
   }
   
   render() {
-    // if (!this.props.initialized) {
-    //   return <Preloader />
-    // }
+    if (!this.props.initialized) {
+      return <Preloader />
+    }
     return (
       <Container className="app-wrapper p-0" no-gutters='true'>
         <Row noGutters>
