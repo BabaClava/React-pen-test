@@ -38,7 +38,6 @@ const LoginForm = (props) => {
                     <Field
                         name='rememberMe'
                         component={StyledCheckbox}
-                        // type='checkbox'
                     />
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import {css} from 'emotion';
 
 export default function ({
     input,
@@ -7,14 +8,13 @@ export default function ({
   }) { 
     return (
         <div>
-            <input {...input} style={checkbox} type='checkbox'/>
+            <input {...input} className={css(checkbox)} type='checkbox'/>
             {touched && error && <span className={errorClassName}>{error}</span>}
         </div>
         )
      }
 
 const checkbox = {
-    'default': {
         WebkitAppearance: 'none',
         MozAppearance: 'none',
         appearance: 'none',
@@ -36,7 +36,6 @@ const checkbox = {
         width: '54px',
         verticalAlign: 'top',
         outline: 'none',
-    },
 
     '&:after': {
         backgroundColor: 'white',
@@ -45,7 +44,7 @@ const checkbox = {
 
         WebkitBoxShadow: 'inset 0 -3px 3px rgba(0, 0, 0, 0.025), 0 1px 4px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.1)',
         boxShadow: 'inset 0 -3px 3px rgba(0, 0, 0, 0.025), 0 1px 4px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.1)',
-        content: '',
+        content: '""',
         display: 'block',
         height: '24px',
         left: '0',
