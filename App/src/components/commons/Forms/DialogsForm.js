@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import {TextField} from './FormFields/TextField'
+import {TextField} from './FormFields'
 
 const dialogTextForm = (props) => {
     const {handleSubmit, pristine} = props

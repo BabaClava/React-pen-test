@@ -2,6 +2,19 @@
 
 module.exports = ({params:{id}, dbClient}) => {
     return dbClient.db('usersdb').collection('users')
-        .findOne({userId: id})
-            .then(user => user)
+        .aggregate([
+            {
+                $match: {
+                    'userId': id
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    password: 0
+                }
+            }
+        ])
+        .toArray()
+        .then(user => user[0])
 }

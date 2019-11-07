@@ -4,11 +4,12 @@ import {css} from 'emotion';
 export default function ({
     input,
     errorClassName,
+    value,
     meta: { touched, error, warning }
   }) { 
     return (
         <div>
-            <input {...input} className={css(checkbox)} type='checkbox'/>
+            <input {...input} className={css(checkbox)} type='checkbox' checked={input.value}/>
             {touched && error && <span className={errorClassName}>{error}</span>}
         </div>
         )

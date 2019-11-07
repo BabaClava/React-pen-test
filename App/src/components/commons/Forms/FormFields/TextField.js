@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './formFields.module.sass'
 
-export const TextField = ({
+export default ({
     input,
     placeholder,
     type,
@@ -13,4 +13,3 @@ export const TextField = ({
         {touched && error && <span className={errorClassName || s.textError}>{error}</span>}
     </div>
 )
- 

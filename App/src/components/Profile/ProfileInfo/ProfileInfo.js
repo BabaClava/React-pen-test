@@ -5,10 +5,21 @@ import avatarPlaceholder from '../../../assets/img/profileAvatar.jpg';
 //import StatusBar from './StatusBar/StatusBar'
 import StatusBarHook from './StatusBar/StatusBarHook';
 import ProfileDescription from './ProfileDescription';
+import ProfileEditForm from '../../commons/Forms/ProfileEditForm';
 
 const ProfileInfo = ({profile, status, updateStatus}) => {
 
   if(!profile) return <Preloader />
+
+  const initialValues = {
+    fullName: profile.fullName,
+    aboutMe: profile.aboutMe,
+    lookingForAJob: profile.lookingForAJob,
+    lookingForAJobDescription: profile.lookingForAJobDescription,
+    contacts: profile.contacts
+  }
+
+  const submit = (formData) => console.log(formData)
 
   return (
     <div>
@@ -19,7 +30,8 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
         <StatusBarHook status={status} updateStatus={updateStatus}/>
       </div>
       <div>
-        <ProfileDescription profile={profile}/>
+        {/* <ProfileDescription profile={profile}/> */}
+        <ProfileEditForm profile={profile} initialValues={initialValues} onSubmit={submit}/>
       </div>
     </div>
   );

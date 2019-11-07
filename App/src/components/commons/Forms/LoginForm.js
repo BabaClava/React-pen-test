@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import {TextField} from './FormFields/TextField';
+import {TextField} from './FormFields';
 import {lengthValidator as length} from './validators/index'
 import s from './forms.module.sass';
 import StyledCheckbox from './FormFields/StyledCheckbox';
