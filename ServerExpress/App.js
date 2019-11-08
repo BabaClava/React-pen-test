@@ -22,7 +22,7 @@ program
 const PORT = parseInt(program.port) || config.port || 3000;
 
 const App = express();
-App.use(DbInitialize);
+App.use(DbInitialize); //TODO: dbInitialize not work
 const corsOptions = {
     origin: true,
     credentials: true

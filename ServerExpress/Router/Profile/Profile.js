@@ -3,7 +3,7 @@ const express = require('express');
 const User = require('../../Models/User')
     , IdValidator = require('../../Validators/IdValidator')
     , LoadUser = require('../../middleware/LoadUser')
-    , HttpError = require('../../Errors/HttpError');
+    // , HttpError = require('../../Errors/HttpError');
 
 const response = {
     'resultCode': 0,
