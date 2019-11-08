@@ -9,3 +9,7 @@ export const getProfile = state => {
 export const getStatus = state => {
     return state.profilePage.status
 }
+
+export const getProfileEditMod = state => {
+    return state.profilePage.profileEditMod
+}

@@ -1,15 +1,12 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import {lengthValidator as length} from './validators/index';
+import { Field, reduxForm, clearSubmitErrors } from 'redux-form';
 import {TextField, StyledCheckbox} from './FormFields';
 import s from './forms.module.sass';
 
 class ProfileEditForm extends React.Component {
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextState !== this.state;
-    }
     render() {
-        let contacts = Object.keys(this.props.profile.contacts).map((el) => {
+        console.log('update')
+        const contacts = Object.keys(this.props.profile.contacts).map((el) => {
             return (
                 <li key={el}>
                     <label>{el}: </label>
@@ -20,8 +17,7 @@ class ProfileEditForm extends React.Component {
                 </li>
             )
         })
-        const length10 = length(10);
-        
+
         return (
             <form onSubmit={this.props.handleSubmit}>
                 <div>
@@ -29,7 +25,6 @@ class ProfileEditForm extends React.Component {
                     <Field
                         name='fullName'
                         component={TextField}
-                        validate={[length10]}
                     />
                 </div>
                 <div>
@@ -56,6 +51,7 @@ class ProfileEditForm extends React.Component {
                 </div>
                     <span>Contacts:</span>
                 <ul>{contacts}</ul>
+                {this.props.error && <div className={s.error}>{this.props.error}</div>}
                 <div> 
                     <button
                         type='submit'
@@ -63,10 +59,14 @@ class ProfileEditForm extends React.Component {
                     >Save
                     </button>
                 </div>
-                {this.props.error && <div className={s.error}>{this.props.error}</div>}
             </form> 
         );
     }
 }
 
-export default reduxForm({form:'profileEdit', enableReinitialize: true})(ProfileEditForm)
+export default reduxForm({form:'profileEdit',
+enableReinitialize: true,
+onChange: (values, dispatch, props) => {
+    if (props.error) dispatch(clearSubmitErrors('profileEdit'));
+  }
+})(ProfileEditForm)

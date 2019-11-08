@@ -7,7 +7,14 @@ import StatusBarHook from './StatusBar/StatusBarHook';
 import ProfileDescription from './ProfileDescription';
 import ProfileEditForm from '../../commons/Forms/ProfileEditForm';
 
-const ProfileInfo = ({profile, status, updateStatus}) => {
+const ProfileInfo = ({
+  isOwner,
+  profile, 
+  updateProfile,
+  profileEditMod,
+  editProfileToggler,
+  status,
+  updateStatus}) => {
 
   if(!profile) return <Preloader />
 
@@ -18,8 +25,8 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
     lookingForAJobDescription: profile.lookingForAJobDescription,
     contacts: profile.contacts
   }
-
-  const submit = (formData) => console.log(formData)
+  const editStart = () => editProfileToggler(true);
+  const submit = (formData) => updateProfile(formData);
 
   return (
     <div>
@@ -30,8 +37,12 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
         <StatusBarHook status={status} updateStatus={updateStatus}/>
       </div>
       <div>
-        {/* <ProfileDescription profile={profile}/> */}
-        <ProfileEditForm profile={profile} initialValues={initialValues} onSubmit={submit}/>
+        {profileEditMod
+          ? <ProfileEditForm profile={profile} 
+                             initialValues={initialValues} 
+                             onSubmit={submit}/>
+          : <ProfileDescription profile={profile} editStart={editStart} isOwner={isOwner}/>
+        }
       </div>
     </div>
   );

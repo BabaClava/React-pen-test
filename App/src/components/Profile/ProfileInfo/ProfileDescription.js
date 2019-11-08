@@ -1,7 +1,7 @@
 import React from 'react';
 import Preloader from '../../commons/Preloader';
 
-const ProfileDescription = ({profile}) => {
+const ProfileDescription = ({profile, ...props}) => {
     if (!profile) return <Preloader/>
 
     let contacts = Object.keys(profile.contacts).map((el) => {
@@ -37,6 +37,11 @@ const ProfileDescription = ({profile}) => {
                     <ul>{contacts}</ul>
                 </div>
             </div>
+            {props.isOwner && <div>
+                <button onClick={props.editStart}
+                >Edit
+                </button>
+            </div>}
         </div>
     );
 }

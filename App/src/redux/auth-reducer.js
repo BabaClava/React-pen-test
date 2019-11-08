@@ -52,7 +52,7 @@ export const logIn = (loginData) => {
                 if (data.resultCode === 0) {
                     dispatch(getAuth())
                 } else {
-                    dispatch(stopSubmit('login', {_error: data.message || 'some error'}))
+                    dispatch(stopSubmit('login', {_error: data.messages[0] || 'some error'}))
                 }
             })
     }

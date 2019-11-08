@@ -17,7 +17,7 @@ const updateMock = {
     lookingForAJobDescription: null,
 }
 
-module.exports = ({dbClient, body: fieldsValue, user}) => {
+module.exports = ({dbClient, body: {data: fieldsValue}, user}) => {
     let updateValues = {
         ...updateMock,
         ...fieldsValue,

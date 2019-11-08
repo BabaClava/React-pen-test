@@ -2,7 +2,8 @@ const express = require('express');
 
 const User = require('../../Models/User')
     , IdValidator = require('../../Validators/IdValidator')
-    , LoadUser = require('../../middleware/LoadUser');
+    , LoadUser = require('../../middleware/LoadUser')
+    , HttpError = require('../../Errors/HttpError');
 
 const response = {
     'resultCode': 0,
@@ -23,6 +24,7 @@ function getHandler(req, res, next) {
 }
 
 function putHandler(req, res, next) {
+    // if (req.body.data.aboutMe.length > 10) return next(new HttpError('max length 10 chars'))
     User.updateProfile(req)
         .then(() => res.json({
             ...response

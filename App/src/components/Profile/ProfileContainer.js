@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import Profile from './Profile';
 import {connect} from 'react-redux';
-import {getProfileData, getStatusData, updateStatus} from '../../redux/profile-reducer';
+import {getProfileData, updateProfile, getStatusData, updateStatus, editProfileToggler} from '../../redux/profile-reducer';
 import {withRouter} from 'react-router-dom';
 import {withAuthRedirect} from '../../hoc/withRedirect'
 import {compose} from 'redux';
 import { getAuthStatus, getUserId } from '../../redux/auth-selectors';
-import { getProfile, getStatus } from '../../redux/profile-selectors';
+import { getProfile, getStatus, getProfileEditMod } from '../../redux/profile-selectors';
 
 class ProfileContainer extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            defaultId: props.authorizedId
+            ownerId: props.authorizedId
         }
     }
 
@@ -25,15 +25,18 @@ class ProfileContainer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(this.props.match.params.id !== prevProps.match.params.id) {
-            this.props.getProfileData(this.state.defaultId)
-            this.props.getStatusData(this.state.defaultId)
+            this.props.getProfileData(this.state.ownerId)
+            this.props.getStatusData(this.state.ownerId)
         }
     }
 
-    
+    get isOwner() {
+        return this.props.ownerId === this.props.match.params.id
+    }
+ 
     render() { 
         return ( 
-            <Profile {...this.props} profile={this.props.profile}/>
+            <Profile {...this.props} isOwner={this.isOwner}/>
         );
     }
 }
@@ -42,13 +45,16 @@ const mapStateToProps = (state) => ({
     profile: getProfile(state),
     status: getStatus(state),
     isAuth: getAuthStatus(state),
-    authorizedId: getUserId(state)
+    authorizedId: getUserId(state),
+    profileEditMod: getProfileEditMod(state)
 })
 
 const mapDispatchToProps = {
     getProfileData,
+    updateProfile,
     getStatusData,
-    updateStatus
+    updateStatus,
+    editProfileToggler
 }
 
 export default compose(
