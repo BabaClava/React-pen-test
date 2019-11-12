@@ -3,8 +3,9 @@ const express = require('express')
     , bodyParser = require('body-parser')
     , cookieParser = require('cookie-parser')
     , cors = require('cors')
-    , session = require('express-session')
-    , MongoStore = require('connect-mongo')(session);
+    // , session = require('express-session')
+    // , MongoStore = require('connect-mongo')(session)
+    , cookieSession = require('cookie-session')
 
 const config = require('./config')
     , db = require('./db')
@@ -34,18 +35,23 @@ App.use(cookieParser());
 
 // SESSIONS
 // ==============================================
-App.use(session({
-    secret: config.session.secret,
-    autoReconnect: true,
-    saveUninitialized: false,
-    resave: false,
-    rolling: true,
-    cookie: config.session.cookie,
-    store: new MongoStore({clientPromise: db.get(), 
-                           touchAfter: 1 * 3600,
-                           ttl: 24*60*60})
-}));
 
+// App.use(session({
+//     secret: config.session.secret,
+//     autoReconnect: true,
+//     saveUninitialized: false,
+//     resave: false,
+//     rolling: true,
+//     cookie: config.session.cookie,
+//     store: new MongoStore({clientPromise: db.get(), 
+//                            touchAfter: 1 * 3600,
+//                            ttl: 24*60*60})
+// }));
+
+App.use(cookieSession({
+    name:'SID',
+    keys: [config.session.secret]
+}))
 
 // ROUTES
 // ==============================================

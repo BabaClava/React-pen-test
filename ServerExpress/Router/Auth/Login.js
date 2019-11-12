@@ -18,7 +18,8 @@ function postHandler (req, res, next) {
     User.login(req)
         .then(user => {
             req.session.user = user._id;
-            if (req.body.rememberMe) req.session.cookie.expires = new Date('Fri, 01 Jan 2100 00:00:00 GMT');
+            // if (req.body.rememberMe) req.session.cookie.expires = new Date('Fri, 01 Jan 2100 00:00:00 GMT'); //if used express-sessions
+            if (req.body.rememberMe) req.sessionOptions.expires = new Date('Fri, 01 Jan 2100 00:00:00 GMT'); // if used cookie-sessions
             res.json({
                 ...result,
                 data: {
@@ -28,14 +29,19 @@ function postHandler (req, res, next) {
         })
         .catch(next);
 }
+// eslint-disable-next-line no-unused-vars
 function deleteHandler(req, res, next) {
-    req.session.destroy((err) => {
-        if (err) next(err);
-        else {
-            res.json({
-                ...result
-            })
-        }
+    // req.session.destroy((err) => { //if used express-sessions
+    //     if (err) next(err);
+    //     else {
+    //         res.json({
+    //             ...result
+    //         })
+    //     }
+    // })
+    req.session = null // if used cookie-sessions
+    res.json({
+        ...result
     })
 }
 
