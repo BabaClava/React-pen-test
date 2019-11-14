@@ -14,11 +14,12 @@ app.use(LoadUser);
 app.put('/', putHandler)
 
 function putHandler(req, res, next) {
-    User.updatePhoto(req)
-        .then(() => res.json({
-            ...response
-        }))
-        .catch(next)
+    // User.updatePhoto(req)
+    //     .then(() => res.json({
+    //         ...response
+    //     }))
+    //     .catch(next)
+    res.json(req.headers)
 }
 
 module.exports = app;
