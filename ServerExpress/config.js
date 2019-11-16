@@ -14,5 +14,5 @@ module.exports = {
             domain: 'localhost',
         }
     },
-    photoMaxSize: 1*1024*1024  //in byte
+    photoMaxSize: 1*1024*1024,  //in byte
 }

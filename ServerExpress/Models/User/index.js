@@ -9,5 +9,6 @@ module.exports = {
     getStatus: require('./GetStatus'),
     getProfile: require('./GetProfile'),
     registration: require('./Registration'),
-    updateProfile: require('./UpdateProfile')
+    updateProfile: require('./UpdateProfile'),
+    updatePhoto: require('./UpdatePhoto'),
 }

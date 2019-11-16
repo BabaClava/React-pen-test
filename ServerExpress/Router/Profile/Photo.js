@@ -9,17 +9,16 @@ const response = {
     'message': [],
     'data': {}
 }
+
 const app = express();
-app.use(LoadUser);
-app.put('/', putHandler)
+app.put('/',LoadUser, putHandler)
 
 function putHandler(req, res, next) {
-    // User.updatePhoto(req)
-    //     .then(() => res.json({
-    //         ...response
-    //     }))
-    //     .catch(next)
-    res.json(req.headers)
+    User.updatePhoto(req)
+        .then(() => res.json({
+            ...response
+        }))
+        .catch(next)
 }
 
 module.exports = app;

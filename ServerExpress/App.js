@@ -1,3 +1,7 @@
+'use strict'
+
+/*global __dirname*/
+
 const express = require('express')
     , process = require('process')
     , bodyParser = require('body-parser')
@@ -6,6 +10,9 @@ const express = require('express')
     // , session = require('express-session')
     // , MongoStore = require('connect-mongo')(session)
     , cookieSession = require('cookie-session')
+    , os = require('os')
+    , fs = require('fs')
+    , sep = require('path').sep;
 
 const config = require('./config')
     , db = require('./db')
@@ -19,6 +26,14 @@ program
     .option('-p, --port <type>')
     // .option('-t, --test')
     .parse(process.argv);
+
+global.AppRoot = __dirname;
+
+fs.mkdtemp(`${os.tmpdir()}${sep}`, (err, folder) => {
+    if (err) throw err;
+    global.tmp = folder;
+    console.info('tmp folder: ', folder)
+})
 
 const PORT = parseInt(program.port) || config.port || 3000;
 
