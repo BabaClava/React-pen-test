@@ -29,11 +29,9 @@ program
 
 global.AppRoot = __dirname;
 
-fs.mkdtemp(`${os.tmpdir()}${sep}`, (err, folder) => {
-    if (err) throw err;
-    global.tmp = folder;
-    console.info('tmp folder: ', folder)
-})
+const tmpFolder = fs.mkdtempSync(`${os.tmpdir()}${sep}`);
+    global.tmp = tmpFolder;
+    console.info('tmp folder: ', tmpFolder);
 
 const PORT = parseInt(program.port) || config.port || 3000;
 

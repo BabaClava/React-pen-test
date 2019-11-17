@@ -1,6 +1,5 @@
 'use strict'
 
-/* global __dirname */
 /*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
 const Busboy = require('busboy')
@@ -11,37 +10,33 @@ const HttpError = require('../../Errors/HttpError')
     , config = require('../../config');
 
 module.exports = (req) => {
-    let tmpFile, newFile;
+    let _tmpFile, _newFile;
     return createTmpDir(req.user._id.toString()) 
         .then(tmpDir => {
             console.log('tmp created');
-            //FIXME: busboyPromise not work
             return busboyPromise(tmpDir, req)
         })
-        .then(filePath => {
-            console.log('tmp file created')
-            tmpFile = filePath;
-            return tmpFile;
-        })
         .then(tmpFile => {
+            console.log('tmp file created:', tmpFile);
+            _tmpFile = tmpFile;
             return createDir(req.user);
         })
-        .then(uploadDirPath => {
-            newFile = path.join(uploadDirPath, path.basename(tmpFile));
-            return fs.promises.rename(tmpFile, newFile);
+        .then(newFileDir => {
+            console.log('regular dir created')
+            _newFile = path.join(newFileDir, path.basename(_tmpFile));
+            console.log(_newFile)
+            return moveTo(_tmpFile, _newFile);
         })
-        .catch(err => {
-            /**
-             * if tmpFile exist - remove file,
-             * if tmpFile not created - it`s global error and rethrow it
-             */
-            if (tmpFile) {
-                return fs.promises.unlink(tmpFile)
+        .finally(() => {
+            console.log('finally')
+            if (_tmpFile) {
+                return fs.promises.unlink(_tmpFile)
             }
-            throw err;
         })
+        //TODO: add sharper & insert lint to db;
 }
 
+//create 'per user' tmp dir path
 function createTmpDir(id) {
     const tmpDirPath = path.join(global.tmp, id);
     return fs.promises.access(tmpDirPath)
@@ -51,8 +46,8 @@ function createTmpDir(id) {
         .then(() => tmpDirPath)
 }
 
+//return dir path if it exist or create new
 function createDir(user) {
-    //return dir path if it exist or create new
     let filePath;
     if (user.photos.large !== null) {
         filePath = path.dirname(user.photos.large);
@@ -64,15 +59,33 @@ function createDir(user) {
     return fs.promises.mkdir(dirPath, {recursive: true})
         .then(() => dirPath);
 }
-
 function random() {
     const randStr = Math.random().toString(36).slice(2);
     return [randStr.slice(0,2), randStr.slice(2,4), randStr.slice(4)]
 }
 
+//move temp file to work directory
+function moveTo(oldPath, newPath) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(oldPath, (err, data) => {
+            if (err) reject(err)
+            fs.writeFile(newPath, data, (err) => {
+                if (err) reject(err)
+                resolve();
+            })
+        })
+    })
+}
+
 function busboyPromise (dir, req) {
-    const busboy = new Busboy({headers: req.headers, limit:{file: config.photoMaxSize}});
-    req.pipe(busboy);
+    const busboy = new Busboy({
+        headers: req.headers, 
+        limits:{
+            files: 1,
+            fileSize: config.photoMaxSize
+        }
+    });
+    console.log()
     
     return new Promise((resolve, reject) => {
         busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
@@ -82,11 +95,11 @@ function busboyPromise (dir, req) {
 
             console.log('start');
             const ext = path.extname(filename);
-            const saveTo = path.join(dir, `new300.${ext}`);
+            const saveTo = path.join(dir, `300${ext}`);
             const fstream = fs.createWriteStream(saveTo)
             file.pipe(fstream)
             
-            file.once('limit', ()=> { 
+            file.on('limit', ()=> { 
             /**
              * Because browser can't obtain response
              * before upload finished, I decided to wait it.
@@ -95,18 +108,26 @@ function busboyPromise (dir, req) {
                 console.log('limit');       
                 file.resume();
             });
-            busboy.on('finish', () => {
+            busboy.once('finish', () => {
                 console.log('finish')
-                if (limit_reached) reject(new HttpError('file to large'))
+                if (limit_reached) {
+                    fs.unlink(saveTo, (err) => {
+                        if (err) throw err;
+                        reject(new HttpError('file to large'))
+                    })
+                }
                 else resolve(saveTo)
             })
-            req.on("close", function(err) {
+            req.once("close", function(err) {
             //stop write stream if client force closed the connection
                 fstream.end();
                 console.log("req aborted by client");
-                reject(new HttpError('request closed by client'));
+                fs.unlink(saveTo, (err) => {
+                    if (err) throw err;
+                    reject(new HttpError('request closed by client'));
+                })
             });
         })
-    })
-    
+        req.pipe(busboy);
+    })   
 }

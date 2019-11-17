@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <fieldset>
+            <input type="file" name="photo" ></br>
+            <button id="btn">Отправить</button>
+        </fieldset>
+    </form>
+
+    <script>
+        document.getElementById('btn').onclick = (e) => {
+            e.preventDefault();
+            const photo = document.forms[0].elements.photo.files[0];
+            let formData = new FormData();
+            formData.append("photo", photo);
+            fetch('/api/profile/photo', {
+                method: "PUT",
+                body: formData
+            })
+                .then(res => console.log(res))
+                .catch(err => console.error(err))
+        }
+    </script>
+</body>
+</html>
