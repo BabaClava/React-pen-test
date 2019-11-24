@@ -4,36 +4,42 @@
 
 const Busboy = require('busboy')
     , fs = require('fs')
-    , path = require('path');
+    , path = require('path')
+    , sharp = require('sharp');
 
 const HttpError = require('../../Errors/HttpError')
     , config = require('../../config');
 
 module.exports = (req) => {
-    let _tmpFile, _newFile;
+    let _tmpDir, _ext;
     return createTmpDir(req.user._id.toString()) 
         .then(tmpDir => {
             console.log('tmp created');
+            _tmpDir = tmpDir;
             return busboyPromise(tmpDir, req)
         })
         .then(tmpFile => {
             console.log('tmp file created:', tmpFile);
-            _tmpFile = tmpFile;
+            _ext = path.extname(tmpFile);
+            return photoResize(tmpFile);
+        })
+        .then(() => {
             return createDir(req.user);
         })
-        .then(newFileDir => {
+        .then(userDir => {
             console.log('regular dir created')
-            _newFile = path.join(newFileDir, path.basename(_tmpFile));
-            console.log(_newFile)
-            return moveTo(_tmpFile, _newFile);
+            const tmpFiles = [100, 300].map(size => path.join(_tmpDir, `${size}${_ext}`))
+            return Promise.all(tmpFiles.map(tmpFile => {
+                let newFile = path.join(userDir, path.basename(tmpFile))
+                return moveTo(tmpFile, newFile);
+            }))
         })
+        .then(paths => console.log(paths))
         .finally(() => {
             console.log('finally')
-            if (_tmpFile) {
-                return fs.promises.unlink(_tmpFile)
-            }
+            return clearTmpDir(_tmpDir)
         })
-        //TODO: add sharper & insert lint to db;
+        //TODO: add db integration & refactoring this code;
 }
 
 //create 'per user' tmp dir path
@@ -64,6 +70,16 @@ function random() {
     return [randStr.slice(0,2), randStr.slice(2,4), randStr.slice(4)]
 }
 
+function clearTmpDir(dir) {
+    return fs.promises.readdir(dir)
+        .then(files => {
+            return Promise.all(files.map(file => {
+                let filePath = path.join(dir, file);
+                return fs.promises.unlink(filePath);
+            }))
+        })
+}
+
 //move temp file to work directory
 function moveTo(oldPath, newPath) {
     return new Promise((resolve, reject) => {
@@ -71,7 +87,7 @@ function moveTo(oldPath, newPath) {
             if (err) reject(err)
             fs.writeFile(newPath, data, (err) => {
                 if (err) reject(err)
-                resolve();
+                resolve(newPath);
             })
         })
     })
@@ -93,9 +109,9 @@ function busboyPromise (dir, req) {
             
             if (mimetype !== 'image/jpeg') file.resume();
 
-            console.log('start');
+            console.log('Busboy: start');
             const ext = path.extname(filename);
-            const saveTo = path.join(dir, `300${ext}`);
+            const saveTo = path.join(dir, `tmp${ext}`);
             const fstream = fs.createWriteStream(saveTo)
             file.pipe(fstream)
             
@@ -105,11 +121,11 @@ function busboyPromise (dir, req) {
              * before upload finished, I decided to wait it.
              */
                 limit_reached = true;       
-                console.log('limit');       
+                console.log('Busboy: limit');       
                 file.resume();
             });
             busboy.once('finish', () => {
-                console.log('finish')
+                console.log('Busboy: finish')
                 if (limit_reached) {
                     fs.unlink(saveTo, (err) => {
                         if (err) throw err;
@@ -121,7 +137,7 @@ function busboyPromise (dir, req) {
             req.once("close", function(err) {
             //stop write stream if client force closed the connection
                 fstream.end();
-                console.log("req aborted by client");
+                console.log("Busboy: req aborted by client");
                 fs.unlink(saveTo, (err) => {
                     if (err) throw err;
                     reject(new HttpError('request closed by client'));
@@ -130,4 +146,14 @@ function busboyPromise (dir, req) {
         })
         req.pipe(busboy);
     })   
+}
+
+function photoResize(file) {
+    const ext = path.extname(file);
+    const dirName = path.dirname(file);
+    return Promise.all([100, 300].map((size) => {
+        return sharp(file)
+            .resize(size, size)
+            .toFile(`${dirName}/${size}${ext}`)
+    }))
 }
