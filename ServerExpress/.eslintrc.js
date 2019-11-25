@@ -24,7 +24,7 @@ module.exports = {
         // "promise/no-callback-in-promise": "warn",
         // "promise/avoid-new": "warn",
         "promise/no-new-statics": "error",
-        "promise/no-return-in-finally": "warn",
+        // "promise/no-return-in-finally": "warn",
         "promise/valid-params": "warn"
     }
 };

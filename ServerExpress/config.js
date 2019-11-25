@@ -1,6 +1,6 @@
 module.exports = {
     port: 3002,
-    static: '/public',
+    static: 'Public',
     db: {
         url: "mongodb://localhost:27017/usersdb",
         reqDefault: 10,
@@ -14,5 +14,9 @@ module.exports = {
             domain: 'localhost',
         }
     },
-    photoMaxSize: 1*1024*1024,  //in byte
+    avatar: {
+        maxFileSize: 1*1024*1024,  //in byte
+        path: 'uploads', // relative to the static dir
+        photoSizes: [100, 300], // in px
+    }
 }

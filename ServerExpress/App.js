@@ -12,7 +12,7 @@ const express = require('express')
     , cookieSession = require('cookie-session')
     , os = require('os')
     , fs = require('fs')
-    , sep = require('path').sep;
+    , path = require('path');
 
 const config = require('./config')
     , db = require('./db')
@@ -29,6 +29,7 @@ program
 
 global.AppRoot = __dirname;
 
+const sep = path.sep;
 const tmpFolder = fs.mkdtempSync(`${os.tmpdir()}${sep}`);
     global.tmp = tmpFolder;
     console.info('tmp folder: ', tmpFolder);
@@ -69,7 +70,7 @@ App.use(cookieSession({
 // ROUTES
 // ==============================================
 // eslint-disable-next-line no-undef
-App.use(express.static(__dirname  + '/Public'));
+App.use(express.static(path.join(__dirname, config.static)));
 App.use(require('./Router'));
 
 // ERRORS HANDLING
