@@ -37,7 +37,7 @@ const tmpFolder = fs.mkdtempSync(`${os.tmpdir()}${sep}`);
 const PORT = parseInt(program.port) || config.port || 3000;
 
 const App = express();
-App.use(DbInitialize); //TODO: dbInitialize not work
+App.use(DbInitialize); //FIXME: dbInitialize not work
 const corsOptions = {
     origin: true,
     credentials: true

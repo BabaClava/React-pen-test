@@ -10,7 +10,8 @@ const Statusbar = (props) => {
     }, [props.status])
 
     function editStatusStart () {
-        editToggler(true);
+        if (props.isOwner) editToggler(true);
+        else return;
     }
     function editStatusEnd() {
         editToggler(false)

@@ -20,11 +20,10 @@ module.exports = (req, dir) => {
         busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
             let limit_reached = false;
             
-            if (mimetype !== 'image/jpeg') file.resume();
+            if (mimetype !== 'image/jpg') file.resume();
 
             console.log('Busboy: start');
-            const ext = path.extname(filename);
-            const saveTo = path.join(dir, `tmp${ext}`);
+            const saveTo = path.join(dir, 'tmp.jpeg');
             const fstream = fs.createWriteStream(saveTo)
             file.pipe(fstream)
             

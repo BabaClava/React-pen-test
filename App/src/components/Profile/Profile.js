@@ -13,6 +13,9 @@ const Profile = (props) => {
                      updateProfile={props.updateProfile}
                      profileEditMod={props.profileEditMod}
                      editProfileToggler={props.editProfileToggler}
+                     avatarEditMod={props.avatarEditMod}
+                     editAvatarToggler={props.editAvatarToggler}
+                     updateAvatar={props.updateAvatar}
                      isOwner={props.isOwner}
         />
         <MyPostsContainer />

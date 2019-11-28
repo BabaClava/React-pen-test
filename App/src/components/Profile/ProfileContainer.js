@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import Profile from './Profile';
 import {connect} from 'react-redux';
-import {getProfileData, updateProfile, getStatusData, updateStatus, editProfileToggler} from '../../redux/profile-reducer';
+import {getProfileData,
+        updateProfile, 
+        getStatusData, 
+        updateStatus, 
+        editProfileToggler,
+        editAvatarToggler,
+        updateAvatar,} from '../../redux/profile-reducer';
 import {withRouter} from 'react-router-dom';
 import {withAuthRedirect} from '../../hoc/withRedirect'
 import {compose} from 'redux';
 import { getAuthStatus, getUserId } from '../../redux/auth-selectors';
-import { getProfile, getStatus, getProfileEditMod } from '../../redux/profile-selectors';
+import { getProfile, getStatus, getProfileEditMod, getAvatarEditMod } from '../../redux/profile-selectors';
 
 class ProfileContainer extends Component {
 
@@ -46,7 +52,8 @@ const mapStateToProps = (state) => ({
     status: getStatus(state),
     isAuth: getAuthStatus(state),
     authorizedId: getUserId(state),
-    profileEditMod: getProfileEditMod(state)
+    profileEditMod: getProfileEditMod(state),
+    avatarEditMod: getAvatarEditMod(state)
 })
 
 const mapDispatchToProps = {
@@ -54,7 +61,9 @@ const mapDispatchToProps = {
     updateProfile,
     getStatusData,
     updateStatus,
-    editProfileToggler
+    editProfileToggler,
+    editAvatarToggler,
+    updateAvatar,
 }
 
 export default compose(

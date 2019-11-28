@@ -15,7 +15,7 @@ module.exports = {
         }
     },
     avatar: {
-        maxFileSize: 1*1024*1024,  //in byte
+        maxFileSize: 10*1024*1024,  //in byte
         path: 'uploads', // relative to the static dir
         photoSizes: [100, 300], // in px
     }

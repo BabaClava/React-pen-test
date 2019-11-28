@@ -13,3 +13,7 @@ export const getStatus = state => {
 export const getProfileEditMod = state => {
     return state.profilePage.profileEditMod
 }
+
+export const getAvatarEditMod = state => {
+    return state.profilePage.avatarEditMod
+}

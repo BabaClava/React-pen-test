@@ -4,7 +4,9 @@ import { stopSubmit } from 'redux-form';
 const ADD_POST = "profile/ADD-POST";
 const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
 const SET_USER_STATUS = 'profile/SET_USER_STATUS';
-const SET_EDIT_MOD = 'profile/SET_EDIT_MOD';
+const SET_PROFILE_EDIT_MOD = 'profile/SET_PROFILE_EDIT_MOD';
+const SET_AVATAR_EDIT_MOD = 'profile/SET_AVATAR_EDIT_MOD';
+const SET_USER_PHOTO = 'profile/SET_USER_PHOTO';
 
 let initialState = {
   postsData: [
@@ -14,7 +16,8 @@ let initialState = {
   ],
   profile: null,
   status: '',
-  profileEditMod: false
+  profileEditMod: false,
+  avatarEditMod: false
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -42,10 +45,23 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         status: action.status
     }
-    case SET_EDIT_MOD:
+    case SET_PROFILE_EDIT_MOD:
       return {
         ...state,
         profileEditMod: action.value
+    }
+    case SET_AVATAR_EDIT_MOD:
+      return {
+        ...state,
+        avatarEditMod: action.value
+    }
+    case SET_USER_PHOTO:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          photos: action.photos
+        }
     }
     default:
       return state;
@@ -66,8 +82,16 @@ export const setUserStatus = (status) => ({
   status
 });
 export const editProfileToggler = (value) => ({
-  type: SET_EDIT_MOD,
+  type: SET_PROFILE_EDIT_MOD,
   value
+});
+export const editAvatarToggler = (value) => ({
+  type: SET_AVATAR_EDIT_MOD,
+  value
+})
+export const setUserPhoto = (photos) => ({
+  type: SET_USER_PHOTO,
+  photos
 })
 
 //Thunks
@@ -97,5 +121,13 @@ export const updateStatus = status => dispatch => {
         if(data.resultCode !== 1) dispatch(setUserStatus(status));
       })
   }
-
+export const updateAvatar = formData => dispatch => {
+  ProfileApi.updateAvatar(formData)
+    .then(data => {
+      if(data.resultCode !== 1){
+        dispatch(setUserPhoto(data.data.photos));
+        dispatch(editAvatarToggler(false))
+      }
+    })
+}
 export default profileReducer;

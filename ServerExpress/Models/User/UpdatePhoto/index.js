@@ -40,15 +40,22 @@ module.exports = (req) => {
         })
         .then(paths => {
             console.log('new path: ', paths)
+            let photos = {
+                large: path.join(_userDir, `300${_ext}`),
+                small: path.join(_userDir, `100${_ext}`),
+            }
+            const timeStamp = Date.now();
+            // eslint-disable-next-line promise/no-nesting
             return req.dbClient.db("usersdb").collection("users")
                 .updateOne({userId: req.user.userId}, {
                     $set: {
-                        photos: {
-                            large: path.join(_userDir, `300${_ext}`),
-                            small: path.join(_userDir, `100${_ext}`),
-                        }
+                        photos: photos
                     }
                 })
+                .then(() => ({
+                    large: `${photos.large}?v=${timeStamp}`,
+                    small: `${photos.small}?v=${timeStamp}`
+                }))
         })
         .finally(() => {
             console.log('finally')

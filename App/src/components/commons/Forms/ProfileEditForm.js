@@ -52,7 +52,10 @@ class ProfileEditForm extends React.Component {
                     <span>Contacts:</span>
                 <ul>{contacts}</ul>
                 {this.props.error && <div className={s.error}>{this.props.error}</div>}
-                <div> 
+                <div>
+                    <button onClick={this.props.editProfileStop}>
+                        Close
+                    </button>
                     <button
                         type='submit'
                         disabled={this.props.invalid}

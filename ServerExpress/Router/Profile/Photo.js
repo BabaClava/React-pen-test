@@ -15,9 +15,14 @@ app.put('/',LoadUser, putHandler)
 
 function putHandler(req, res, next) {
     User.updatePhoto(req)
-        .then(() => res.json({
-            ...response
-        }))
+        .then((result) => {
+            res.json({
+                ...response,
+                data: {
+                    photos: result
+                }
+            })
+        })
         .catch(next)
 }
 
