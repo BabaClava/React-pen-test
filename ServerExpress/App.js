@@ -45,6 +45,7 @@ const corsOptions = {
 App.use(cors(corsOptions));
 App.use(bodyParser.json());
 App.use(bodyParser.raw());
+App.use(bodyParser.urlencoded({extended: true}));
 App.use(cookieParser());
 
 // SESSIONS
@@ -78,15 +79,17 @@ App.use(require('./Router'));
 
 // eslint-disable-next-line no-unused-vars
 App.use((err, req, res, next) => {
-    let errorMsg;
+    let errorMsg, errorCode;
     if (err instanceof HttpError) { 
         errorMsg = err.message;
+        errorCode = err.code;
     } else {
         errorMsg = 'server error';
+        errorCode = '1'
         console.error(err)
     }
     res.json({
-        resultCode: 1,
+        resultCode: errorCode,
         messages: [errorMsg],
         data: {}
     })

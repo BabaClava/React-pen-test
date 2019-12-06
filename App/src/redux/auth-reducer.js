@@ -2,12 +2,14 @@ import { AuthApi } from "../api";
 import { stopSubmit } from 'redux-form';
 
 const SET_USER_DATA = 'auth/SET_USER_DATA';
+const SET_CAPTCHA_REQUIRED = 'auth/SET_CAPTCHA_REQUIRED'
 
 const initialState = {
     userId: null,
     email: null,
     login: null,
-    isAuth: false
+    isAuth: false,
+    showCaptcha: false
 }
 
 const authReducer = (state = initialState, action) => {
@@ -17,6 +19,11 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data,
             }
+        case SET_CAPTCHA_REQUIRED:
+            return {
+                ...state,
+                showCaptcha: action.value
+        }
         default:
             return state;
     }
@@ -32,6 +39,10 @@ export const setUserData = (userId, email, login, isAuth) => ({
         isAuth
     }
 });
+export const setShowCaptcha = (value) => ({
+    type: SET_CAPTCHA_REQUIRED,
+    value
+})
 
 //Thunks
 export const getAuth = () => {
@@ -50,7 +61,11 @@ export const logIn = (loginData) => {
         AuthApi.logIn(loginData)
             .then(data => {
                 if (data.resultCode === 0) {
-                    dispatch(getAuth())
+                    dispatch(getAuth());
+                    dispatch(setShowCaptcha(false))
+                } else if (data.resultCode === 10) {
+                    dispatch(stopSubmit('login', {_error: data.messages[0] || 'some error'}))
+                    dispatch(setShowCaptcha(true))
                 } else {
                     dispatch(stopSubmit('login', {_error: data.messages[0] || 'some error'}))
                 }

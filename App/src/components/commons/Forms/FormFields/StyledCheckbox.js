@@ -4,7 +4,6 @@ import {css} from 'emotion';
 export default function ({
     input,
     errorClassName,
-    value,
     meta: { touched, error, warning }
   }) { 
     return (

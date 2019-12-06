@@ -1,7 +1,9 @@
 const express = require('express');
 
 const User = require('../../Models/User')
-    , LoadUser = require('../../middleware/LoadUser');
+    , LoadUser = require('../../middleware/LoadUser')
+    , Limiter = require('../../middleware/Limiter')
+    , Captcha = require('../../middleware/Captcha');
 
 const result = {
     resultCode: 0,
@@ -9,10 +11,15 @@ const result = {
     data: {}
 }
 
+const withCaptcha = (req, res, next) => {
+    if (req.isLimit) return Captcha(req, res, next);
+    else next();
+}
+
 const app = express();
 app.route('/')
     .delete(LoadUser, deleteHandler)
-    .post(postHandler)
+    .post(Limiter, withCaptcha, postHandler)
 
 function postHandler (req, res, next) {
     User.login(req)

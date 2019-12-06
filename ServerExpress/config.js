@@ -18,5 +18,9 @@ module.exports = {
         maxFileSize: 10*1024*1024,  //in byte
         path: 'uploads', // relative to the static dir
         photoSizes: [100, 300], // in px
+    },
+    captcha: {
+        sitekey: "6Lf3ucUUAAAAAAK3EZqH5Cbj4HVRNSf1VTS6uOLo",
+        secret: "6Lf3ucUUAAAAAOqbIGEKYw33Y-_-_36dNk1eFfsz"
     }
 }
