@@ -18,7 +18,7 @@ app.get('/:id?', IdValidator, getHandler);
 
 function putHandler(req, res, next) {
     req.status = req.body.status.toString();
-    if (req.status.length > 300) return next(new HttpError('max length 300'));
+    if (req.status.length > 20) return next(new HttpError('max length 300'));
 
     User.updateStatus(req)
         .then(() => {

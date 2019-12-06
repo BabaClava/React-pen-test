@@ -11,14 +11,35 @@ import { compose } from 'redux';
 import { connect } from "react-redux";
 import { initialize } from "./redux/app-reducer";
 import { getInitializeStatus } from './redux/app-selectors';
+import ErrorModal from './components/commons/ErrorModal'
 
 const Login = lazy(() => import('./components/Login/Login'));
 const DialogsContainer = lazy(() => import('./components/Dialogs/DialogsContainer'));
 const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      unhandledError: false,
+    }
+    this.unhandledRejection = this.unhandledRejection.bind(this);
+    this.closeErrorModal = this.closeErrorModal.bind(this)  
+  }
+  unhandledRejection (event) {
+    console.error(event.reason)
+    this.setState({unhandledError: true})
+  }
+  closeErrorModal() {
+    this.setState({unhandledError: false})
+  }
+
   componentDidMount() {
-    this.props.initialize()
+    this.props.initialize();
+    window.addEventListener('unhandledrejection', this.unhandledRejection)
+  }
+  componentWillUnmount() {
+    window.removeEventListener('unhandledrejection', this.unhandledRejection)
   }
   
   render() {
@@ -37,7 +58,7 @@ class App extends Component {
           <Col tag="main" className="content">
             <Suspense fallback={<Preloader />}>
               <Switch>
-                <Redirect from="/" exact to="/login" />
+                <Redirect from="/" exact to="/profile" />
                 <Route path="/profile/:id?" render={() => <ProfileContainer />} />
                 <Route path="/dialogs" render={() => <DialogsContainer />} />
                 <Route path="/users" render={() => <UsersContainer />} />
@@ -46,6 +67,13 @@ class App extends Component {
             </Suspense>
           </Col>
         </Row>
+        {true && 
+          <ErrorModal
+            isOpen={this.state.unhandledError}
+            onClose={this.closeErrorModal}
+          >
+            <span style={{color:'red'}}>something went wrong</span>
+          </ErrorModal>}
       </Container>
     );
   }
