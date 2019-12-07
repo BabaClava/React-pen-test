@@ -21,6 +21,13 @@ class PhotoEditor extends React.Component {
             width: 200,
             height: 200
         };
+        this.handleNewImage = this.handleNewImage.bind(this);
+        this.handleScale = this.handleScale.bind(this);
+        this.handlePositionChange = this.handlePositionChange.bind(this);
+        this.handleRotateRight = this.handleRotateRight.bind(this);
+        this.handleRotateLeft = this.handleRotateLeft.bind(this);
+        this.setEditorRef = this.setEditorRef.bind(this);
+        this.onClickSave = this.onClickSave.bind(this);
     }
     handleNewImage = e => {
         this.setState({ image: e.target.files[0] });
