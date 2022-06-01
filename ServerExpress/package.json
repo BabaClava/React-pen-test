@@ -21,7 +21,7 @@
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.17.0",
     "mongodb": "^3.3.2",
-    "sharp": "^0.23.3"
+    "sharp": "^0.30.5"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
